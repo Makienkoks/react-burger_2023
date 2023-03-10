@@ -5,10 +5,11 @@ import { ConstructorElement, DragIcon, Button, CurrencyIcon} from '@ya.praktikum
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 const BurgerConstructor = (props) => {
+    const { ingredients } = props
     const [totalSum, calculateAmount] = React.useState(0)
     const [visible, setVisible] = React.useState(false)
-    const bun = props.ingredients.filter(item => item.type === 'bun')[0]
-    const list = props.ingredients.filter((item, index) => item.type !== 'bun' && index < 8)
+    const bun = ingredients.filter(item => item.type === 'bun')[0]
+    const list = ingredients.filter((item, index) => item.type !== 'bun' && index < 8)
     useEffect(() => {
         let sum = 0
         list.map(item => sum = sum + item.price)
@@ -23,9 +24,11 @@ const BurgerConstructor = (props) => {
     }
     const modal = (
         <>
+            {visible &&
             <Modal onClose={toggleModal}>
                 <OrderDetails/>
             </Modal>
+            }
         </>
     )
     return (
@@ -34,7 +37,7 @@ const BurgerConstructor = (props) => {
                 <ConstructorElement
                     type="top"
                     isLocked={true}
-                    text={bun.name}
+                    text={`${bun.name} (верх)`}
                     price={bun.price}
                     thumbnail={bun.image}
                 />
@@ -58,7 +61,7 @@ const BurgerConstructor = (props) => {
                 <ConstructorElement
                     type="bottom"
                     isLocked={true}
-                    text={bun.name}
+                    text={`${bun.name} (низ)`}
                     price={bun.price}
                     thumbnail={bun.image}
                 />
@@ -76,12 +79,26 @@ const BurgerConstructor = (props) => {
                     Оформить заказ
                 </Button>
             </div>
-            {visible && modal}
+            {modal}
         </div>
 
     );
 }
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.array
+    ingredients: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string,
+            name: PropTypes.string,
+            type: PropTypes.string,
+            proteins: PropTypes.number,
+            fat: PropTypes.number,
+            carbohydrates: PropTypes.number,
+            calories: PropTypes.number,
+            price: PropTypes.number,
+            image: PropTypes.string,
+            image_mobile: PropTypes.string,
+            image_large: PropTypes.string,
+        })
+    ).isRequired
 };
 export default BurgerConstructor

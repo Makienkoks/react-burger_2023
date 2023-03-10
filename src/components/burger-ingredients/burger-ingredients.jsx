@@ -1,29 +1,15 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types';
 import styles from '../burger-ingredients/burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-const BurgerIngredients = ({ingredients}) => {
+const BurgerIngredients = (props) => {
+    const { ingredients } = props
     const [current, setCurrent] = React.useState('bun')
-    const [title, setTitle] = React.useState('')
     const [visible, setVisible] = React.useState(false)
     const [ingredientData, setData] = React.useState(null)
-    const list = ingredients.filter(item => item.type === current)
-    const getTitle = current => () => {
-        switch (current) {
-            case 'main':
-                return 'Начинки'
-            case 'sauce':
-                return 'Соусы'
-            default:
-                return 'Булки'
-        }
-    };
-     useEffect(() => {
-         setTitle(getTitle(current))
-     }, [current]);
-     const tabClick = tab => () => {
+    const tabClick = tab => () => {
         setCurrent(tab)
     };
     const listItemClick = React.useCallback(
@@ -39,12 +25,14 @@ const BurgerIngredients = ({ingredients}) => {
     }
     const modal = (
         <>
+            {visible &&
             <Modal title={'Детали ингредиента'}
                    onClose={toggleModal}>
                 <IngredientDetails item={ingredientData}
                                    showDetails
                 />
             </Modal>
+            }
         </>
     )
     return (
@@ -65,10 +53,35 @@ const BurgerIngredients = ({ingredients}) => {
             </div>
             <div className={styles.tab_content}>
                 <p className={`text text_type_main-medium mb-6`}>
-                    {title}
+                    Булки
                 </p>
                 <div className={styles.blocks}>
-                    {list.map(item =>
+                    {ingredients.map(item =>
+                        item.type === 'bun' &&
+                        <IngredientDetails key={item._id}
+                                           item={item}
+                                           onCardClick={listItemClick}
+                        />
+                    )}
+                </div>
+                <p className={`text text_type_main-medium mb-6`}>
+                    Соусы
+                </p>
+                <div className={styles.blocks}>
+                    {ingredients.map(item =>
+                        item.type === 'sauce' &&
+                        <IngredientDetails key={item._id}
+                                           item={item}
+                                           onCardClick={listItemClick}
+                        />
+                    )}
+                </div>
+                <p className={`text text_type_main-medium mb-6`}>
+                    Начинки
+                </p>
+                <div className={styles.blocks}>
+                    {ingredients.map(item =>
+                        item.type === 'main' &&
                         <IngredientDetails key={item._id}
                                            item={item}
                                            onCardClick={listItemClick}
@@ -76,11 +89,25 @@ const BurgerIngredients = ({ingredients}) => {
                     )}
                 </div>
             </div>
-            {visible && modal}
+            {modal}
         </div>
     );
 }
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.array
+    ingredients: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string,
+            name: PropTypes.string,
+            type: PropTypes.string,
+            proteins: PropTypes.number,
+            fat: PropTypes.number,
+            carbohydrates: PropTypes.number,
+            calories: PropTypes.number,
+            price: PropTypes.number,
+            image: PropTypes.string,
+            image_mobile: PropTypes.string,
+            image_large: PropTypes.string
+        })
+    ).isRequired
 };
 export default BurgerIngredients

@@ -2,7 +2,8 @@ import React from 'react'
 import styles from './ingredient-details.module.css';
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-const IngredientDetails = React.memo(({ item, onCardClick, showDetails }) => {
+const IngredientDetails = React.memo((props) => {
+    const { item, onCardClick, showDetails } = props;
     const handleClick = () => onCardClick(item);
     return (
         <div key={item._id}
@@ -65,7 +66,19 @@ const IngredientDetails = React.memo(({ item, onCardClick, showDetails }) => {
     )
 });
 IngredientDetails.propTypes = {
-    item: PropTypes.object,
+    item: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        proteins: PropTypes.number,
+        fat: PropTypes.number,
+        carbohydrates: PropTypes.number,
+        calories: PropTypes.number,
+        price: PropTypes.number,
+        image: PropTypes.string,
+        image_mobile: PropTypes.string,
+        image_large: PropTypes.string
+    }).isRequired,
     onCardClick: PropTypes.func,
     showDetails: PropTypes.bool
 };

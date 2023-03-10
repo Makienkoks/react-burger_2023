@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from "../app-header/app-header.module.css";
-import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import ButtonIcon from '../button/button'
 function AppHeader() {
     return (
@@ -19,7 +19,9 @@ function AppHeader() {
                     </div>
                 </div>
                 <div className={styles.logo}>
-                    <Logo />
+                    <a href="/">
+                        <Logo />
+                    </a>
                 </div>
                 <div className={styles.row}>
                     <div className="p-1">

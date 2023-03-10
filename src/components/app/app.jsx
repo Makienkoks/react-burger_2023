@@ -1,24 +1,28 @@
 import React, {useEffect} from 'react';
-import AppHeader from './components/app-header/app-header'
-import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
-import BurgerConstructor from "./components/burger-constructor/burger-constructor";
+import AppHeader from '../app-header/app-header'
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
 const App = () => {
     const [isLoading, setLoading] = React.useState(true)
     const [hasError, setError] = React.useState(false)
     const [data, setData] = React.useState(null)
     const url = 'https://norma.nomoreparties.space/api/ingredients'
+    const checkResponse = (res) => {
+        return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+    }
     useEffect(() => {
         fetch(url)
-            .then(res => res.json())
+            .then(checkResponse)
             .then(res => {
                 setData(res.data)
                 setLoading(false)
             })
-            .catch(() => {
-                setData([])
+            .catch(error => {
+                setData(null)
                 setLoading(false)
                 setError(true)
-            });
+                // console.error('Error: ', error)
+            })
     }, []);
     return (
         <div className='App'>

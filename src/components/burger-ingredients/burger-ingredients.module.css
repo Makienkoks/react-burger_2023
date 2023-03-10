@@ -16,7 +16,7 @@
     width: 47%;
 }
 .blocks {
-    composes: mb-5 from global;
+    composes: mb-10 from global;
     width: 100%;
     display: flex;
     flex-direction: row;
