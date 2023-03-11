@@ -4,6 +4,7 @@ import styles from '../burger-ingredients/burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { ingredientsPropTypes } from "../../utils/prop-types";
 const BurgerIngredients = (props) => {
     const { ingredients } = props
     const [current, setCurrent] = React.useState('bun')
@@ -94,20 +95,6 @@ const BurgerIngredients = (props) => {
     );
 }
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string,
-            name: PropTypes.string,
-            type: PropTypes.string,
-            proteins: PropTypes.number,
-            fat: PropTypes.number,
-            carbohydrates: PropTypes.number,
-            calories: PropTypes.number,
-            price: PropTypes.number,
-            image: PropTypes.string,
-            image_mobile: PropTypes.string,
-            image_large: PropTypes.string
-        })
-    ).isRequired
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired
 };
 export default BurgerIngredients
