@@ -1,0 +1,54 @@
+.title {
+    color: blue;
+}
+.constructor {
+    composes: mt-15 p-5 from global;
+    width: 53%;
+}
+.item {
+    composes: pl-4 from global;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    margin-right: 8px;
+}
+.wrapper {
+    composes: mb-4 pr-4 from global;
+    display: flex;
+    justify-content: flex-end;
+}
+.ingredients {
+    composes: mb-4 custom-scroll from global;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 463px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.total {
+    composes: pr-4 pt-6 from global;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+.price {
+    composes: pr-10 from global;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+.price span svg {
+    width: 36px;
+    height: 36px;
+}

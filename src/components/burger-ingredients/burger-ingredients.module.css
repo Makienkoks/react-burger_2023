@@ -1,0 +1,25 @@
+.tabs {
+    composes: mb-10 from global;
+    display: flex;
+}
+.tab_content {
+    composes: custom-scroll from global;
+    max-height: 664px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.title {
+    composes: text text_type_main-large mb-5 from global;
+}
+.ingredients {
+    composes: p-5 from global;
+    width: 47%;
+}
+.blocks {
+    composes: mb-10 from global;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

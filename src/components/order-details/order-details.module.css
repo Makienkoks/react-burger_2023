@@ -1,0 +1,29 @@
+.order {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.orderNumber {
+    composes: pt-7 mb-8 text text_type_digits-large custom-scroll from global;
+}
+.total {
+    composes: pr-4 pt-6 from global;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+.order_icon svg {
+    width: 48px;
+    height: 48px;
+}
+.bgr {
+    background: transparent url("../../images/bgr.png") no-repeat center;
+    width: 120px;
+    height: 120px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 60px;
+}

@@ -1,0 +1,29 @@
+.button {
+    text-decoration: none;
+    background: transparent;
+    border: medium none;
+    margin: 0;
+    box-sizing: border-box;
+    outline: medium none;
+    border-radius: 40px;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    color: #F2F2F3;
+    composes: p-4 from global;
+}
+.title {
+    text-indent: 36px;
+    white-space: nowrap;
+    composes: text text_type_main-default from global;
+}
+.icon {
+    left: 20px;
+    top: 50%;
+    margin: -13px 0 0 0;
+    position: absolute;
+}
