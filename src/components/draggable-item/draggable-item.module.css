@@ -1,0 +1,14 @@
+.item {
+    composes: pl-4 from global;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    margin-right: 8px;
+}
