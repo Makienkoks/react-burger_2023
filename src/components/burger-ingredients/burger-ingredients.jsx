@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useMemo, useRef} from 'react'
 import styles from '../burger-ingredients/burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import Modal from "../modal/modal";
@@ -7,8 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import { loadIngredients } from "../../services/ingredients/actions";
 import { DELETE_SELECTED, SET_SELECTED } from "../../services/selectedIngredient/actions";
 const BurgerIngredients = () => {
-    const { v4: uuidv4 } = require('uuid');
     const dispatch = useDispatch();
+    const getIngredients = (store) => store.ingredients.ingredients.data
 
     const bunRef = useRef();
     const sauceRef = useRef();
@@ -19,9 +19,19 @@ const BurgerIngredients = () => {
 
     const itemsRequest = useSelector(store => store.ingredients.ingredients.isLoading);
     const itemsFailed = useSelector(store => store.ingredients.ingredients.error);
-    const ingredients = useSelector(store => store.ingredients.ingredients.data);
+    const ingredients = useSelector(getIngredients);
 
     const ingredient = useSelector(store => store.selectedIngredient.selected);
+
+    const buns = useMemo(() => {
+        return ingredients ? ingredients.filter(item => item.type === 'bun') : []
+        }, [ingredients])
+    const sauces = useMemo(() => {
+        return ingredients ? ingredients.filter(item => item.type === 'sauce') : []
+    }, [ingredients])
+    const mains = useMemo(() => {
+        return ingredients ? ingredients.filter(item => item.type === 'main') : []
+    }, [ingredients])
 
     useEffect(
         () => {
@@ -103,8 +113,7 @@ const BurgerIngredients = () => {
                             Булки
                         </p>
                         <div className={styles.blocks}>
-                            {ingredients.map(item =>
-                                item.type === 'bun' &&
+                            {buns.map(item =>
                                 <IngredientDetails key={item._id}
                                                    item={item}
                                                    onCardClick={listItemClick}
@@ -115,8 +124,7 @@ const BurgerIngredients = () => {
                             Соусы
                         </p>
                         <div className={styles.blocks}>
-                            {ingredients.map(item =>
-                                item.type === 'sauce' &&
+                            {sauces.map(item =>
                                 <IngredientDetails key={item._id}
                                                    item={item}
                                                    onCardClick={listItemClick}
@@ -127,8 +135,7 @@ const BurgerIngredients = () => {
                             Начинки
                         </p>
                         <div className={styles.blocks}>
-                            {ingredients.map(item =>
-                                item.type === 'main' &&
+                            {mains.map(item =>
                                 <IngredientDetails key={item._id}
                                                    type={'main'}
                                                    item={item}

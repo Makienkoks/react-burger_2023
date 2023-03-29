@@ -166,7 +166,7 @@ const BurgerConstructor = () => {
                         </span>
                     </div>
                     <Button size="large"
-                            disabled={!(bun || (list && list.length))}
+                            disabled={!bun}
                             htmlType="button"
                             type="primary"
                             onClick={onClick}>
