@@ -1,23 +1,6 @@
-.title {
-    color: blue;
-}
 .constructor {
     composes: mt-15 p-5 from global;
     width: 53%;
-}
-.item {
-    composes: pl-4 from global;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-}
-.icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2px;
-    margin-right: 8px;
 }
 .wrapper {
     composes: mb-4 pr-4 from global;
@@ -51,4 +34,17 @@
 .price span svg {
     width: 36px;
     height: 36px;
+}
+.default_element {
+    display: flex;
+    justify-content: flex-end;
+}
+.default_constructor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.drop_block {
+    outline: 2px dashed transparent;
+    transition: outline-color 0.3s ease;
 }
