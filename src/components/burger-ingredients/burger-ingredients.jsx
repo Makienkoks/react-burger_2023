@@ -1,13 +1,12 @@
-import React, {useEffect, useMemo, useRef} from 'react'
+import React, { useMemo, useRef} from 'react'
 import styles from '../burger-ingredients/burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {useDispatch, useSelector} from "react-redux";
-import { loadIngredients } from "../../services/ingredients/actions";
-import { DELETE_SELECTED, SET_SELECTED } from "../../services/selectedIngredient/actions";
+import {useLocation, useNavigate} from "react-router-dom";
+import { useSelector } from "react-redux";
 const BurgerIngredients = () => {
-    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const location = useLocation()
     const getIngredients = (store) => store.ingredients.ingredients.data
 
     const bunRef = useRef();
@@ -21,43 +20,18 @@ const BurgerIngredients = () => {
     const itemsFailed = useSelector(store => store.ingredients.ingredients.error);
     const ingredients = useSelector(getIngredients);
 
-    const ingredient = useSelector(store => store.selectedIngredient.selected);
+    const buns = useMemo(() => ingredients ? ingredients.filter(item => item.type === 'bun') : [], [ingredients])
+    const sauces = useMemo(() => ingredients ? ingredients.filter(item => item.type === 'sauce') : [], [ingredients])
+    const mains = useMemo(() => ingredients ? ingredients.filter(item => item.type === 'main') : [], [ingredients])
 
-    const buns = useMemo(() => {
-        return ingredients ? ingredients.filter(item => item.type === 'bun') : []
-        }, [ingredients])
-    const sauces = useMemo(() => {
-        return ingredients ? ingredients.filter(item => item.type === 'sauce') : []
-    }, [ingredients])
-    const mains = useMemo(() => {
-        return ingredients ? ingredients.filter(item => item.type === 'main') : []
-    }, [ingredients])
+    const tabClick = tab => () => setCurrent(tab)
 
-    useEffect(
-        () => {
-            dispatch(loadIngredients());
-        },
-        [dispatch]
-    );
-
-    const tabClick = tab => () => {
-        setCurrent(tab)
-    };
     const listItemClick = React.useCallback(
         (ingredient) => {
-            dispatch({
-                type: SET_SELECTED,
-                payload: {...ingredient}
-            });
-        },[dispatch]
-    );
-    const toggleModal = () => {
-        dispatch({type: DELETE_SELECTED});
-    }
-
-    const getBoundingClientRectTop = (value) => {
-        return value.current ? Math.floor(value.current.getBoundingClientRect().top) : 0;
-    }
+            navigate(`/ingredients/${ingredient._id}`, {state: {backgroundLocation: location}})
+        },[location, navigate]
+    )
+    const getBoundingClientRectTop = (value) => value.current ? Math.floor(value.current.getBoundingClientRect().top) : 0
 
     const handleScroll = () => {
         const containerPosition = getBoundingClientRectTop(containerRef)
@@ -75,24 +49,11 @@ const BurgerIngredients = () => {
             setCurrent('main')
         }
     };
-
-    const modal = (
-        <>
-            {ingredient &&
-            <Modal title={'Детали ингредиента'}
-                   onClose={toggleModal}>
-                <IngredientDetails item={ingredient}
-                                   showDetails
-                />
-            </Modal>
-            }
-        </>
-    )
     return (
         <>
             {itemsRequest && 'Загрузка...'}
             {itemsFailed && 'Произошла ошибка'}
-            {!itemsRequest && !itemsFailed && ingredients.length &&
+            {!itemsRequest && !itemsFailed && ingredients &&
                 <div className={styles.ingredients}>
                     <h1 className={styles.title}>
                         Соберите бургер
@@ -144,7 +105,6 @@ const BurgerIngredients = () => {
                             )}
                         </div>
                     </div>
-                    {modal}
                 </div>
             }
         </>

@@ -13,8 +13,13 @@
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    color: #F2F2F3;
     composes: p-4 from global;
+}
+.active {
+    color: #F2F2F3;
+}
+.inactive  {
+    color: #8585AD;
 }
 .title {
     text-indent: 36px;

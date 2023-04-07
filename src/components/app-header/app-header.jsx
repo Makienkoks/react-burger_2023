@@ -1,21 +1,17 @@
 import React from 'react'
 import styles from "../app-header/app-header.module.css";
-import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import ButtonIcon from '../button/button'
+import { Logo } from '@ya.praktikum/react-developer-burger-ui-components'
+import Button from '../button/button'
 function AppHeader() {
     return (
         <header className={styles.header}>
             <div className="container">
                 <div className={styles.row}>
                     <div className="p-1">
-                        <ButtonIcon with_icon={true} title={'Конструктор'}>
-                            <BurgerIcon type="primary" />
-                        </ButtonIcon>
+                        <Button href='/' title='Конструктор' icon='BurgerIcon' />
                     </div>
                     <div className="p-1">
-                        <ButtonIcon with_icon={true} title={'Лента заказов'} className={'text_color_inactive'}>
-                            <ListIcon type="secondary" />
-                        </ButtonIcon>
+                        <Button href='/profile/order' title='Лента заказов' icon='ListIcon' />
                     </div>
                 </div>
                 <div className={styles.logo}>
@@ -25,9 +21,7 @@ function AppHeader() {
                 </div>
                 <div className={styles.row}>
                     <div className="p-1">
-                        <ButtonIcon with_icon={true} title={'Личный кабинет'} className={'text_color_inactive'}>
-                            <ProfileIcon type="secondary" />
-                        </ButtonIcon>
+                        <Button href='/profile' title='Личный кабинет' icon='ProfileIcon' />
                     </div>
                 </div>
             </div>

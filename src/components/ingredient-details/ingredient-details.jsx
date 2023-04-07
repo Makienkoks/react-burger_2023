@@ -56,7 +56,7 @@ const IngredientDetails = React.memo((props) => {
                 </div>
             </>
             }
-            <p className={`text ${styles.text_center} ${showDetails ? 'mb-8 text_type_main-medium' : 'text_type_main-default'}`}>
+            <p className={`text ${styles.text_center} ${showDetails ? 'mb-8 text_type_main-medium' : 'text_type_main-profile'}`}>
                 {item.name}
             </p>
             {showDetails &&

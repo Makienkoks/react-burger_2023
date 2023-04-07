@@ -1,22 +1,52 @@
 import React from 'react'
 import styles from "./button.module.css";
 import PropTypes from "prop-types";
-const ButtonIcon = (props) => {
-    const { title, className, with_icon, children } = props;
+import { BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import {NavLink} from 'react-router-dom';
+const Button = (props) => {
+    const { title, href, icon } = props
+    const getClass = (isActive) => {
+        return [ styles.button, isActive ? styles.active : styles.inactive ].join(' ')
+    }
+    const getTypeIcon = (isActive) => {
+        return isActive ? 'primary' : 'secondary'
+    }
+    const getIcon = (iconName, isActive) => {
+        switch (iconName) {
+            case 'BurgerIcon':
+                return <BurgerIcon type={getTypeIcon(isActive)} />
+            case 'ListIcon':
+                return <ListIcon type={getTypeIcon(isActive)} />
+            case 'ProfileIcon':
+                return <ProfileIcon type={getTypeIcon(isActive)} />
+            default:
+                return null
+        }
+    }
+
     return (
-        <a href="/" className={styles.button}>
-            {with_icon &&
-                <span className={styles.icon}> {children} </span>
-            }
-            <span className={`${className} ${with_icon && styles.title}`}>
-                {title}
-            </span>
-        </a>
+        <NavLink to={href} className={({ isActive }) => getClass(isActive)}>
+            {({ isActive }) => (
+                <>
+                    {icon &&
+                    <span className={styles.icon}>
+                        {getIcon(icon, isActive)}
+                    </span>
+                    }
+                    <span className={icon ? styles.title : null}>
+                        {title}
+                    </span>
+                </>
+            ) }
+        </NavLink>
     );
 }
-ButtonIcon.propTypes = {
+// Button.defaultProps  = {
+//     title: 'Нажми на меня! :))))'
+// }
+Button.propTypes = {
+    href: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    className: PropTypes.string,
-    with_icon: PropTypes.bool
-};
-export default ButtonIcon
+    icon: PropTypes.string
+}
+export default Button

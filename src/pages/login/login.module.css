@@ -1,0 +1,18 @@
+.form {
+    margin: 160px auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    align-items: center;
+}
+.link {
+    color: #4C4CFF;
+    text-decoration: none;
+}
+.text_center {
+    text-align: center;
+}
+.button_block {
+    display: flex;
+
+}

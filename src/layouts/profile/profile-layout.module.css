@@ -1,0 +1,40 @@
+.container {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    position: relative;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+.page {
+    width: 100%;
+    display: flex;
+    margin-top: 100px;
+    flex-wrap: wrap;
+}
+.link {
+    text-decoration: none;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    display: inline-flex;
+    composes: text text_type_main-medium text_color_inactive from global;
+}
+.active_link {
+    composes: link;
+    color: #ffffff;
+}
+.side_bar {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+}
+.menu {
+    margin-top: 0;
+    padding-left: 0;
+    padding-bottom: 6px;
+    list-style-type: none;
+}
