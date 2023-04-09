@@ -42,7 +42,8 @@ const Profile = () => {
     const onCancel = () => {
         setValue(currentData)
     }
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault()
         let data = {}
         if (formData.password.length) {
             data = formData

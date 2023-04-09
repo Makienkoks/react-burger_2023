@@ -15,7 +15,8 @@ const Register = () => {
         e.preventDefault()
         setValue({ ...formData, [e.target.name]: e.target.value });
     }
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault()
         let sendData = true
         for (let key in formData) {
             if (formData[key] === '') {
