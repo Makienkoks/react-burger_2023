@@ -17,8 +17,6 @@ const ResetPassword = () => {
     const isLoading = useSelector( (store) => store.user.isLoading);
     const success = useSelector( (store) => store.user.success);
 
-
-
     useEffect(() => {
         if (!isLoading && success && !allowResetPassword) {
             navigate('/')

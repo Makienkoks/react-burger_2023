@@ -9,20 +9,17 @@ const Protected = (props) => {
     const isAuthChecked = useSelector(store => store.user.isAuthChecked)
     const location = useLocation();
 
-    if (!isAuthChecked && !user) {
-        return (
-            <div className={styles.block}>
-                <div className={styles.loader}></div>
-            </div>
-            )
-    } else if (onlyAuth && !user) {
-        return <Navigate to={'/login'}></Navigate>
-    } else if ((!onlyAuth && !user) || (onlyAuth && user)) {
-        return children
-    } else {
-        const { from } = location.state || { from: { pathname: "/"}};
-        return <Navigate to={from}/>
+    if (!isAuthChecked) {
+        return null
     }
+    if (!onlyAuth && user) {
+        const { from } = location.state || { from: { pathname: "/" } };
+        return <Navigate to={from} />;
+    }
+    if (onlyAuth && !user) {
+        return <Navigate to="/login" state={{ from: location }} />;
+    }
+    return  children
 }
 Protected.defaultProps  = {
     onlyAuth: true
