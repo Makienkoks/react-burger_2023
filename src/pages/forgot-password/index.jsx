@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from "../forgot-password/forgot-password.module.css";
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import {forgotPassword} from "../../services/user/actions";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {sendUserFailed} from "../../services/user/reducer";
 const ForgotPassword = () => {
     const dispatch = useDispatch()
     const [formData, setValue] = useState({
@@ -13,16 +14,26 @@ const ForgotPassword = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
+    const isLoading = useSelector( (store) => store.user.isLoading);
+    const success = useSelector( (store) => store.user.success);
+
     const handleChange = (e) => {
         e.preventDefault()
         setValue({ ...formData, [e.target.name]: e.target.value });
     }
+
+    useEffect(() => {
+        if (!isLoading && success) {
+            localStorage.setItem('allowResetPassword', 'allow')
+            navigate('/reset-password', {state: {from: location}})
+            dispatch(sendUserFailed())
+        }
+    },[isLoading, success]);
+
     const onSubmit = (e) => {
         e.preventDefault()
         if (formData.email !== '') {
             dispatch(forgotPassword(formData))
-            localStorage.setItem('allowResetPassword', 'allow')
-            navigate('/reset-password', {state: {from: location}})
         }
     }
     return (
