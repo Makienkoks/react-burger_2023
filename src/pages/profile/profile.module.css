@@ -1,0 +1,15 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    align-items: center;
+}
+.message {
+    opacity: 0.4;
+}
+.button_block {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    width: 100%;
+}

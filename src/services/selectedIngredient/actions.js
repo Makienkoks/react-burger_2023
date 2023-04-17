@@ -1,2 +1,0 @@
-export const SET_SELECTED = 'SET_SELECTED'
-export const DELETE_SELECTED = 'DELETE_SELECTED'

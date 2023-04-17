@@ -9,8 +9,10 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import DraggableItem from "../draggable-item/draggable-item";
 import { sendOrder } from "../../services/order/actions";
+import {useNavigate} from "react-router-dom";
 
 const BurgerConstructor = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const [totalSum, calculateAmount] = React.useState(0)
@@ -18,6 +20,8 @@ const BurgerConstructor = () => {
 
     const list = useSelector(store => store.orderList.ingredients);
     const bun = useSelector(store => store.orderList.bun);
+
+    const user = useSelector( (store) => store.user.user);
 
     useEffect(() => {
         let sum = 0
@@ -31,15 +35,19 @@ const BurgerConstructor = () => {
     }, [bun, list]);
 
     const onClick = () => {
-        toggleModal(true)
-        const orderId = []
-        if (bun || list) {
-            const order = bun ? [bun, ...list, bun] : [...list]
-            order.forEach(item => {
-                orderId.push(item._id)
-            })
-            const ingredients = orderId
-            dispatch(sendOrder({'ingredients': ingredients}));
+        if (user) {
+            toggleModal(true)
+            const orderId = []
+            if (bun || list) {
+                const order = bun ? [bun, ...list, bun] : [...list]
+                order.forEach(item => {
+                    orderId.push(item._id)
+                })
+                const ingredients = orderId
+                dispatch(sendOrder({'ingredients': ingredients}));
+            }
+        } else {
+            navigate('/login')
         }
     }
     const toggleModal = (isVisible) => {
