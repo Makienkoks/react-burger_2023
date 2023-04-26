@@ -3,23 +3,24 @@ import styles from "../register/register.module.css";
 import { Link } from 'react-router-dom';
 import { Input, PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import {registrationUser} from "../../services/user/actions";
-import {useDispatch} from "react-redux";
+import { useDispatch } from '../../services/hooks';
+import {TUser} from "../../utils/types";
 const Register = () => {
     const dispatch = useDispatch()
-    const [formData, setValue] = useState({
+    const [formData, setValue] = useState<TUser>({
         name: '',
         email: '',
         password: '',
     });
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setValue({ ...formData, [e.target.name]: e.target.value });
     }
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
         for (let key in formData) {
-            if (formData[key] === '') {
+            if (formData[key as keyof TUser] === '') {
                 sendData = false
                 break
             }
@@ -43,23 +44,20 @@ const Register = () => {
                 extraClass="mb-6"
             />
             <EmailInput
-                type="email"
                 placeholder="E-mail"
                 value={ formData.email }
                 name="email"
                 extraClass="mb-6"
                 required
                 onChange={ handleChange }
-                errorText={'Введите корректный e-mail'}
             />
             <PasswordInput
                 onChange={ handleChange }
                 value={ formData.password }
                 name={'password'}
                 extraClass="mb-6"
-                errorText={'Ненадёжный пароль'}
             />
-            <Button htmlType="submit" extraClass="mb-10" type="primary" size="medium" onClick={ onSubmit }>
+            <Button htmlType="submit" extraClass="mb-10" type="primary" size="medium">
                 Зарегистрироваться
             </Button>
             <div className="mt-10 mb-4 text text_type_main-default text_color_inactive">

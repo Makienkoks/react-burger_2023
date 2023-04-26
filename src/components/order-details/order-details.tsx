@@ -2,10 +2,14 @@ import React from 'react'
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import {useSelector} from "react-redux";
+import {RootState} from "../../services/store";
 const OrderDetails = () => {
-    const numOrder = useSelector(store => store.sendOrder.order.number);
-    const numRequest = useSelector(store => store.sendOrder.order.isLoading);
-    const numSuccess = useSelector(store => store.sendOrder.order.success);
+    // @ts-ignore
+    const numOrder = useSelector((store: RootState) => store.sendOrder.order.number);
+    // @ts-ignore
+    const numRequest = useSelector((store: RootState) => store.sendOrder.order.isLoading);
+    // @ts-ignore
+    const numSuccess = useSelector((store: RootState) => store.sendOrder.order.success);
     return (
         <>
             {numRequest && 'Загрузка...'}

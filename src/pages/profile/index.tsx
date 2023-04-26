@@ -1,18 +1,24 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import styles from "../profile/profile.module.css";
 import {PasswordInput, EmailInput, Input, Button} from '@ya.praktikum/react-developer-burger-ui-components';
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from '../../services/hooks';
 import { getUser } from "../../services/user/actions";
+import {RootState} from "../../services/store";
+import { TUser } from "../../utils/types";
 const Profile = () => {
     const dispatch = useDispatch()
-    const user = useSelector(store => store.user.user)
-    const [isVisible, setIsVisible] = useState(false)
-    const [formData, setValue] = useState({ name: '', email: '', password: '' })
+    const user = useSelector((store: RootState) => store.user.user)
+    const [isVisible, setIsVisible] = useState<boolean>(false)
+    const [formData, setValue] = useState<TUser>({ name: '', email: '', password: '' })
 
     const currentData = useMemo(() => {
-        let data = {}
-        data['name'] = user.name ? user.name : ''
-        data['email'] = user.email ? user.email : ''
+        let data = {
+            name: '',
+            email: '',
+            password: ''
+        }
+        data['name'] = user && user['name' as keyof TUser] ? user['name' as keyof TUser] : ''
+        data['email'] = user && user['email' as keyof TUser] ? user['email' as keyof TUser] : ''
         data['password'] = ''
         return data
     }, [user])
@@ -24,7 +30,7 @@ const Profile = () => {
     useEffect(() => {
         let sendData = true
         for (let key in formData) {
-            if (key !== 'password' && formData[key] === '') {
+            if (key !== 'password' && formData[key as keyof TUser] === '') {
                 sendData = false
                 break
             }
@@ -35,16 +41,20 @@ const Profile = () => {
             formData.password !== currentData.password))
     },[formData, currentData])
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
-        setValue({ ...formData, [e.target.name]: (e.target.value).trim(' ') });
+        setValue({ ...formData, [e.target.name]: (e.target.value).trim() });
     }
     const onCancel = () => {
         setValue(currentData)
     }
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        let data = {}
+        let data = {
+            name: '',
+            email: '',
+            password: ''
+        }
         if (formData.password.length) {
             data = formData
             dispatch(getUser(data))
@@ -54,6 +64,7 @@ const Profile = () => {
             dispatch(getUser(data))
         }
     }
+
 
     return (
             <form className={`${styles.form} ml-7`} onSubmit={onSubmit}>
@@ -69,15 +80,12 @@ const Profile = () => {
                     extraClass="mb-6"
                 />
                 <EmailInput
-                    type="email"
                     placeholder="E-mail"
                     value={ formData.email }
                     name="email"
-                    icon={"EditIcon"}
                     extraClass="mb-6"
                     required
                     onChange={ handleChange }
-                    errorText={'Введите корректный e-mail'}
                 />
                 <PasswordInput
                     onChange={ handleChange }
@@ -85,14 +93,13 @@ const Profile = () => {
                     name={'password'}
                     icon={"EditIcon"}
                     extraClass="mb-6"
-                    error={false}
                 />
                 {isVisible &&
                     <div className={styles.button_block}>
                         <Button extraClass="mr-3" htmlType="button" type="secondary" size="large" onClick={onCancel}>
                             Отмена
                         </Button>
-                        <Button htmlType="submit" extraClass="mb-10 ml-3" type="primary" size="medium" onClick={ onSubmit }>
+                        <Button htmlType="submit" extraClass="mb-10 ml-3" type="primary" size="medium">
                             Сохранить
                         </Button>
                     </div>

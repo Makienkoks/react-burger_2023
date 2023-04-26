@@ -2,8 +2,8 @@ import React from 'react';
 import {NavLink, Outlet, useMatch} from 'react-router-dom';
 import AppHeader from '../../components/app-header/app-header';
 import styles from "../../layouts/profile/profile-layout.module.css";
-import {useDispatch} from "react-redux";
 import {logOutUser} from "../../services/user/actions";
+import { useDispatch } from '../../services/hooks';
 
 const ProfileLayout = () => {
     const profilePath = useMatch('/profile')

@@ -78,7 +78,7 @@ export const logOutUser = (data) => {
             if (res && res.success) {
                 dispatch(setUser({
                     user: null,
-                    success: true
+                    success: false
                 }))
                 localStorage.removeItem('accessToken')
                 localStorage.removeItem('refreshToken')

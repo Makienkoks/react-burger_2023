@@ -1,20 +1,19 @@
+import {getResponse} from './utils';
+import {TResetFormFields, TUser} from "./types";
+
 const apiConfig = {
   baseUrl: 'https://norma.nomoreparties.space/api'
 }
 
-const getResponse = (res) => {
-  if (res.ok) {
-    return res.json()
-  }
-
-  return Promise.reject(`Ошибка ${res.status}`)
+export type TOrder = {
+  ingredients: [number]
 }
 
-export const getIngredients = async () => {
+export const getIngredientsData = async () => {
   return await fetch(`${apiConfig.baseUrl}/ingredients`).then(getResponse)
 }
 
-export const send = async (data) => {
+export const send = async (data:TOrder) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -25,23 +24,22 @@ export const send = async (data) => {
   return await fetch(`${apiConfig.baseUrl}/orders`, requestOptions).then(getResponse)
 }
 
-export const user = async  (data) => {
+export const user = async  (data:TUser | null) => {
   const requestOptions = {
+    method: 'GET',
     headers: {
-      method: 'GET',
       'Content-Type': 'application/json;charset=utf-8',
-      Authorization: localStorage.getItem('accessToken'),
+      Authorization: '' + localStorage.getItem('accessToken'),
     },
+    body: JSON.stringify(data)
   }
   if (data) {
     requestOptions.method = 'PATCH'
-    requestOptions.body = JSON.stringify(data)
   }
 
   return await fetch(`${apiConfig.baseUrl}/auth/user?`, requestOptions).then(getResponse)
 }
-
-export const register = async (data) => {
+export const register = async (data:TUser) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -51,8 +49,7 @@ export const register = async (data) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/register`, requestOptions).then(getResponse)
 }
-
-export const logout = async (data) => {
+export const logout = async (data: { token: string }) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -62,8 +59,7 @@ export const logout = async (data) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/logout`, requestOptions).then(getResponse)
 }
-
-export const login = async (data) => {
+export const login = async (data: { email: string, password: string }) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -73,8 +69,7 @@ export const login = async (data) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/login`, requestOptions).then(getResponse)
 }
-
-export const forgotPass = async (data) => {
+export const forgotPass = async (data: { email: string }) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -84,8 +79,7 @@ export const forgotPass = async (data) => {
   }
   return await fetch(`${apiConfig.baseUrl}/password-reset`, requestOptions).then(getResponse)
 }
-
-export const resetPass = async (data) => {
+export const resetPass = async (data: TResetFormFields) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -95,8 +89,7 @@ export const resetPass = async (data) => {
   }
   return await fetch(`${apiConfig.baseUrl}/password-reset/reset`, requestOptions).then(getResponse)
 }
-
-export const token = async (data) => {
+export const token = async (data: { token: string }) => {
   const requestOptions = {
     method: 'POST',
     headers: {

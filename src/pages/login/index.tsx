@@ -3,22 +3,23 @@ import styles from "../login/login.module.css";
 import { Link } from 'react-router-dom';
 import { PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import {logInUser} from "../../services/user/actions";
-import {useDispatch} from "react-redux";
+import { useDispatch } from '../../services/hooks';
+import {TFormFields} from "../../utils/types";
 const Login = () => {
     const dispatch = useDispatch()
-    const [formData, setValue] = useState({
+    const [formData, setValue] = useState<TFormFields>({
         email: '',
         password: '',
     });
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setValue({ ...formData, [e.target.name]: e.target.value });
     }
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
         for (let key in formData) {
-            if (formData[key] === '') {
+            if (formData[key as keyof TFormFields] === '') {
                 sendData = false
                 break
             }
@@ -32,21 +33,18 @@ const Login = () => {
         <form className={`${styles.form} pl-5 pr-5`} onSubmit={ onSubmit }>
             <h1 className={`text text_type_main-medium mb-6 ${styles.text_center}`}>Вход</h1>
             <EmailInput
-                type="email"
                 placeholder="E-mail"
                 value={ formData.email }
                 name="email"
                 extraClass="mb-6"
                 required
                 onChange={ handleChange }
-                errorText={'Введите корректный e-mail'}
             />
             <PasswordInput
                 onChange={ handleChange }
                 value={ formData.password }
                 name={'password'}
                 extraClass="mb-6"
-                error={false}
             />
             <Button htmlType="submit" extraClass="mb-10" type="primary" size="medium">
                 Вход

@@ -1,16 +1,21 @@
 import React, {useRef} from 'react'
 import styles from '../draggable-item/draggable-item.module.css';
 import {useDrag, useDrop} from "react-dnd";
-import { ingredientsPropTypes } from "../../utils/prop-types";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import {TIngredient} from "../../utils/types";
+import type { XYCoord } from 'dnd-core'
+type TDraggableItem = {
+    ingredient: TIngredient,
+    index: number,
+    moveItem: (arg0: number, arg1: number) => void,
+    removeIngredient: (arg: string) => void,
+}
 
-const DraggableItem = (props) => {
-    const { ingredient, index, moveItem, removeIngredient } = props
-    const ref = useRef()
-
+const DraggableItem = ({ ingredient, index, moveItem, removeIngredient }: TDraggableItem) => {
+    const ref = useRef<HTMLDivElement>(null)
     const handleClick = () => removeIngredient(ingredient.key);
 
-    const [, dropRef] = useDrop({
+    const [, dropRef] = useDrop<{ index: number}, void>({
         accept: 'changeOrder',
         hover(item, monitor) {
             if (!ref.current) {
@@ -23,7 +28,7 @@ const DraggableItem = (props) => {
             }
             const hoverBoundingRect = ref.current?.getBoundingClientRect()
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-            const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top
+            const hoverActualY = (monitor.getClientOffset() as XYCoord).y - hoverBoundingRect.top
             if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return
             if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return
 
@@ -47,25 +52,20 @@ const DraggableItem = (props) => {
     const opacity = isDragging ? 0 : 1;
 
     return (
-        <>
-            <div className={styles.item}
-                 style={{ opacity }}
-                 ref={ref}
-                 key={ingredient.key}>
+        <div className={styles.item}
+             style={{ opacity }}
+             ref={ref}
+             key={ingredient.key}>
                 <span className={styles.icon}>
                     <DragIcon type="primary" />
                 </span>
-                <ConstructorElement
-                    text={ingredient.name}
-                    price={ingredient.price}
-                    thumbnail={ingredient.image}
-                    handleClose={handleClick}
-                />
-            </div>
-        </>
+            <ConstructorElement
+                text={ingredient.name}
+                price={ingredient.price}
+                thumbnail={ingredient.image}
+                handleClose={handleClick}
+            />
+        </div>
     );
 }
-DraggableItem.propTypes = {
-    ingredient: ingredientsPropTypes.isRequired
-};
 export default DraggableItem
