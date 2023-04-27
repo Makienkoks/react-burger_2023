@@ -7,13 +7,14 @@ const OrderDetails = () => {
     // @ts-ignore
     const numOrder = useSelector((store: RootState) => store.sendOrder.order.number);
     // @ts-ignore
-    const numRequest = useSelector((store: RootState) => store.sendOrder.order.isLoading);
+    const isLoading = useSelector((store: RootState) => store.sendOrder.order.isLoading);
     // @ts-ignore
-    const numSuccess = useSelector((store: RootState) => store.sendOrder.order.success);
+    const success = useSelector((store: RootState) => store.sendOrder.order.success);
     return (
         <>
-            {numRequest && 'Загрузка...'}
-            {!numRequest && numSuccess && numOrder &&
+            {isLoading && !success && 'Загрузка...'}
+            {!isLoading && !success && 'Произошла ошибка'}
+            {!isLoading && success && numOrder &&
                 <div className={`pb-10 mb-10 ${styles.order}`}>
                     <div className={styles.orderNumber}>{numOrder}</div>
                     <p className="mb-15 text text_type_main-medium">идентификатор заказа</p>

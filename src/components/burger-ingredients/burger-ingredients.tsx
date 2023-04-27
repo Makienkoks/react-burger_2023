@@ -51,8 +51,8 @@ const BurgerIngredients = ():JSX.Element => {
     };
     return (
         <>
-            {isLoading && 'Загрузка...'}
-            {error && 'Произошла ошибка'}
+            {isLoading && error && 'Загрузка...'}
+            {!isLoading && error && 'Произошла ошибка'}
             {!isLoading && !error && ingredients &&
                 <div className={styles.ingredients}>
                     <h1 className={styles.title}>

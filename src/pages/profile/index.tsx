@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import styles from "../profile/profile.module.css";
 import {PasswordInput, EmailInput, Input, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/hooks';
-import { getUser } from "../../services/user/actions";
+import {getUser, setError} from "../../services/user/actions";
 import {RootState} from "../../services/store";
 import { TUser } from "../../utils/types";
 import useForm from "../../hooks/useForm";
@@ -13,6 +13,16 @@ const Profile = () => {
     const [isVisible, setIsVisible] = useState<boolean>(false)
 
     const { values, handleChange } = useForm<TUser>();
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
 
     const initialState = useMemo(() => {
         let data = {
@@ -49,7 +59,7 @@ const Profile = () => {
         setIsVisible(!sendData ? sendData : (currentData.name !== initialState.name ||
             currentData.email !== initialState.email ||
             currentData.password !== initialState.password))
-    },[currentData])
+    },[currentData, initialState])
 
 
     useEffect(() => {
@@ -104,14 +114,17 @@ const Profile = () => {
                     extraClass="mb-6"
                 />
                 {isVisible &&
-                    <div className={styles.button_block}>
-                        <Button extraClass="mr-3" htmlType="button" type="secondary" size="large" onClick={onCancel}>
-                            Отмена
-                        </Button>
-                        <Button htmlType="submit" extraClass="mb-10 ml-3" type="primary" size="medium">
-                            Сохранить
-                        </Button>
-                    </div>
+                    <>
+                        <p className={`input__error`}>{error}</p>
+                        <div className={styles.button_block}>
+                            <Button extraClass="mr-3" htmlType="button" type="secondary" size="large" onClick={onCancel}>
+                                Отмена
+                            </Button>
+                            <Button htmlType="submit" extraClass="mb-10 ml-3" type="primary" size="medium">
+                                Сохранить
+                            </Button>
+                        </div>
+                    </>
                 }
             </form>
     )

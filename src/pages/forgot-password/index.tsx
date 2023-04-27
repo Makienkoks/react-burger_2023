@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import styles from "../forgot-password/forgot-password.module.css";
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import {forgotPassword} from "../../services/user/actions";
+import {forgotPassword, setError} from "../../services/user/actions";
 import { useDispatch, useSelector } from '../../services/hooks';
 import {sendUserFailed} from "../../services/user/reducer";
 import {TForgotFormFields} from "../../utils/types";
@@ -13,6 +13,16 @@ const ForgotPassword = () => {
     const dispatch = useDispatch()
 
     const { values, handleChange } = useForm<TForgotFormFields>();
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -45,6 +55,7 @@ const ForgotPassword = () => {
                 required
                 onChange={ handleChange }
             />
+            <p className={`input__error`}>{error}</p>
             <Button extraClass="mb-10" htmlType="submit" type="primary" size="medium">
                 Восстановить
             </Button>

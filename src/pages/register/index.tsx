@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from "../register/register.module.css";
 import { Link } from 'react-router-dom';
 import { Input, PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import {registrationUser} from "../../services/user/actions";
-import { useDispatch } from '../../services/hooks';
+import {registrationUser, setError} from "../../services/user/actions";
+import {useDispatch, useSelector} from '../../services/hooks';
 import { TUser } from "../../utils/types";
 import useForm from "../../hooks/useForm";
+import {RootState} from "../../services/store";
 
 const Register = () => {
     const dispatch = useDispatch()
 
     const { values, handleChange } = useForm<TUser>();
-    
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
@@ -53,6 +64,7 @@ const Register = () => {
                 name={'password'}
                 extraClass="mb-6"
             />
+            <p className={`input__error`}>{error}</p>
             <Button htmlType="submit" extraClass="mb-10" type="primary" size="medium">
                 Зарегистрироваться
             </Button>

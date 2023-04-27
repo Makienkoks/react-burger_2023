@@ -10,6 +10,9 @@ export const loadIngredients = () => {
       } else {
         dispatch(getIngredientsFailed(null))
       }
+    }).catch(err => {
+      // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+      dispatch(getIngredientsFailed(null))
     })
   }
 }

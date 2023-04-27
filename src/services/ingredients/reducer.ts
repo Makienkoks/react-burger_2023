@@ -3,7 +3,7 @@ import {TIngredients} from "../../utils/types";
 const initialState: TIngredientsData = {
     ingredients: [],
     isLoading: false,
-    error: false,
+    error: true,
 };
 export type TIngredientsData = {
     ingredients: Array<TIngredients>,
@@ -20,12 +20,12 @@ export const ingredientsSlice = createSlice({
         getIngredientsSuccess: (state, action) => {
             state.isLoading = false
             state.ingredients = action.payload.data
-            state.error =!action.payload.success
+            state.error = !action.payload.success
 
         },
         getIngredientsFailed: (state, action) => {
             state.isLoading = false
-            state.error = false
+            state.error = true
         }
     }
 })

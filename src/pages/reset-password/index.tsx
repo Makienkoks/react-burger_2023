@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from "../reset-password/reset-password.module.css";
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import {resetPassword} from "../../services/user/actions";
+import {resetPassword, setError} from "../../services/user/actions";
 import { useDispatch, useSelector } from '../../services/hooks';
 import { TResetFormFields } from "../../utils/types";
 import {RootState} from "../../services/store";
@@ -16,7 +16,17 @@ const ResetPassword = () => {
     const { from } = location.state || { from: { pathname: "/"}}
     
     const { values, handleChange } = useForm<TResetFormFields>();
-    
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
+
     const isLoading = useSelector( (store: RootState) => store.user.isLoading);
     const success = useSelector( (store: RootState) => store.user.success);
 
@@ -70,6 +80,7 @@ const ResetPassword = () => {
                 size={'default'}
                 extraClass="mb-6"
             />
+            <p className={`input__error`}>{error}</p>
             <Button extraClass="mb-10" htmlType="submit" type="primary" size="medium">
                 Сохранить
             </Button>

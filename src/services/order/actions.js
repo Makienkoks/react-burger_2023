@@ -20,6 +20,11 @@ export function sendOrder(data) {
           payload: res
         })
       }
+    }).catch(err => {
+      // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+      dispatch({
+        type: SEND_ORDER_FAILED
+      })
     })
   }
 }
