@@ -2,6 +2,7 @@ import React from 'react'
 import styles from "../app-header/app-header.module.css";
 import { Logo } from '@ya.praktikum/react-developer-burger-ui-components'
 import Button from '../button/button'
+import {Link} from "react-router-dom";
 const AppHeader = () => {
     return (
         <header className={styles.header}>
@@ -15,9 +16,9 @@ const AppHeader = () => {
                     </div>
                 </div>
                 <div className={styles.logo}>
-                    <a href="/">
+                    <Link to="/">
                         <Logo />
-                    </a>
+                    </Link>
                 </div>
                 <div className={styles.row}>
                     <div className="p-1">
