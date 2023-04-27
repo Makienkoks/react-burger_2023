@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from '../../services/hooks';
 import { getUser } from "../../services/user/actions";
 import {RootState} from "../../services/store";
 import { TUser } from "../../utils/types";
+import useForm from "../../hooks/useForm";
+
 const Profile = () => {
     const dispatch = useDispatch()
     const user = useSelector((store: RootState) => store.user.user)
     const [isVisible, setIsVisible] = useState<boolean>(false)
-    const [formData, setValue] = useState<TUser>({ name: '', email: '', password: '' })
 
-    const currentData = useMemo(() => {
+    const { values, handleChange } = useForm<TUser>();
+
+    const initialState = useMemo(() => {
         let data = {
             name: '',
             email: '',
@@ -23,56 +26,62 @@ const Profile = () => {
         return data
     }, [user])
 
+    const [currentData, setCurrentData] = useState<TUser>(initialState);
+
     useEffect(() => {
-        setValue(currentData)
-    },[currentData])
+        let data:TUser = {
+            name: values.name || values.name === '' ? values.name : currentData.name,
+            email: values.email || values.email === '' ? values.email : currentData.email,
+            password: values.password || values.password === '' ? values.password : currentData.password
+        }
+        setCurrentData(data)
+    },[values, initialState])
+
 
     useEffect(() => {
         let sendData = true
-        for (let key in formData) {
-            if (key !== 'password' && formData[key as keyof TUser] === '') {
+        for (let key in values) {
+            if (key !== 'password' && values[key as keyof TUser] === '') {
                 sendData = false
                 break
             }
         }
+        setIsVisible(!sendData ? sendData : (currentData.name !== initialState.name ||
+            currentData.email !== initialState.email ||
+            currentData.password !== initialState.password))
+    },[currentData])
 
-        setIsVisible(!sendData ? sendData : (formData.name !== currentData.name ||
-            formData.email !== currentData.email ||
-            formData.password !== currentData.password))
-    },[formData, currentData])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setValue({ ...formData, [e.target.name]: (e.target.value).trim() });
-    }
+    useEffect(() => {
+        setCurrentData(initialState)
+    },[user])
+
     const onCancel = () => {
-        setValue(currentData)
+        setCurrentData(initialState)
     }
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        let data = {
+        let data:TUser = {
             name: '',
             email: '',
             password: ''
         }
-        if (formData.password.length) {
-            data = formData
-            dispatch(getUser(data))
+        if (values && 'password' in values && values.password) {
+            dispatch(getUser(values))
         } else {
-            data.name = formData.name
-            data.email = formData.email
+            data.name = values.name as string
+            data.email = values.email as string
             dispatch(getUser(data))
         }
     }
 
-
     return (
-            <form className={`${styles.form} ml-7`} onSubmit={onSubmit}>
+            <form className={`${styles.form} ml-7`} onSubmit={handleSubmit}>
                 <Input
                     type={'text'}
                     placeholder={'Имя'}
                     onChange={ handleChange }
-                    value={formData.name}
+                    value={ currentData.name }
                     name={'name'}
                     icon={"EditIcon"}
                     errorText={'Ошибка'}
@@ -81,7 +90,7 @@ const Profile = () => {
                 />
                 <EmailInput
                     placeholder="E-mail"
-                    value={ formData.email }
+                    value={ currentData.email }
                     name="email"
                     extraClass="mb-6"
                     required
@@ -89,7 +98,7 @@ const Profile = () => {
                 />
                 <PasswordInput
                     onChange={ handleChange }
-                    value={ formData.password }
+                    value={ currentData.password }
                     name={'password'}
                     icon={"EditIcon"}
                     extraClass="mb-6"

@@ -1,43 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from "../register/register.module.css";
 import { Link } from 'react-router-dom';
 import { Input, PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import {registrationUser} from "../../services/user/actions";
 import { useDispatch } from '../../services/hooks';
-import {TUser} from "../../utils/types";
+import { TUser } from "../../utils/types";
+import useForm from "../../hooks/useForm";
+
 const Register = () => {
     const dispatch = useDispatch()
-    const [formData, setValue] = useState<TUser>({
-        name: '',
-        email: '',
-        password: '',
-    });
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setValue({ ...formData, [e.target.name]: e.target.value });
-    }
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const { values, handleChange } = useForm<TUser>();
+    
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
-        for (let key in formData) {
-            if (formData[key as keyof TUser] === '') {
+        for (let key in values) {
+            if (values[key as keyof TUser] === '') {
                 sendData = false
                 break
             }
         }
         if (sendData) {
-            dispatch(registrationUser(formData))
+            dispatch(registrationUser(values))
         }
     }
 
     return (
-        <form className={styles.form} onSubmit={ onSubmit }>
+        <form className={styles.form} onSubmit={ handleSubmit }>
             <h1 className={`text text_type_main-medium mb-6 ${styles.text_center}`}>Регистрация</h1>
             <Input
                 type={'text'}
                 placeholder={'Имя'}
                 onChange={ handleChange }
-                value={formData.name}
+                value={ values.name || '' }
                 name={'name'}
                 errorText={'Ошибка'}
                 size={'default'}
@@ -45,7 +41,7 @@ const Register = () => {
             />
             <EmailInput
                 placeholder="E-mail"
-                value={ formData.email }
+                value={ values.email || '' }
                 name="email"
                 extraClass="mb-6"
                 required
@@ -53,7 +49,7 @@ const Register = () => {
             />
             <PasswordInput
                 onChange={ handleChange }
-                value={ formData.password }
+                value={ values.password || '' }
                 name={'password'}
                 extraClass="mb-6"
             />

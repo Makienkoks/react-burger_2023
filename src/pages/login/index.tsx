@@ -1,40 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from "../login/login.module.css";
 import { Link } from 'react-router-dom';
 import { PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import {logInUser} from "../../services/user/actions";
 import { useDispatch } from '../../services/hooks';
 import {TFormFields} from "../../utils/types";
+import useForm from "../../hooks/useForm";
+
 const Login = () => {
     const dispatch = useDispatch()
-    const [formData, setValue] = useState<TFormFields>({
-        email: '',
-        password: '',
-    });
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setValue({ ...formData, [e.target.name]: e.target.value });
-    }
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const { values, handleChange } = useForm<TFormFields>();
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
-        for (let key in formData) {
-            if (formData[key as keyof TFormFields] === '') {
+        for (let key in values) {
+            if (values[key as keyof TFormFields] === '') {
                 sendData = false
                 break
             }
         }
         if (sendData) {
-            dispatch(logInUser(formData))
+            dispatch(logInUser(values))
         }
     }
 
     return (
-        <form className={`${styles.form} pl-5 pr-5`} onSubmit={ onSubmit }>
+        <form className={`${styles.form} pl-5 pr-5`} onSubmit={ handleSubmit }>
             <h1 className={`text text_type_main-medium mb-6 ${styles.text_center}`}>Вход</h1>
             <EmailInput
                 placeholder="E-mail"
-                value={ formData.email }
+                value={ values.email || '' }
                 name="email"
                 extraClass="mb-6"
                 required
@@ -42,7 +38,7 @@ const Login = () => {
             />
             <PasswordInput
                 onChange={ handleChange }
-                value={ formData.password }
+                value={ values.password  || ''}
                 name={'password'}
                 extraClass="mb-6"
             />
