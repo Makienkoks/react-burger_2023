@@ -12,8 +12,8 @@ interface IModalProps {
 const Modal = ({ title, onClose, children }: IModalProps) => {
     const modalRoot = document.getElementById('modals') as HTMLElement
     const handleClick = () => onClose(false);
-    const downHandler = (key: object) => {
-        ('code' in key && key.code === 'Escape') && handleClick()
+    const downHandler = (event: KeyboardEvent) => {
+        (event.key === 'Escape') && handleClick()
     }
     useEffect(() => {
         window.addEventListener('keydown', downHandler)
