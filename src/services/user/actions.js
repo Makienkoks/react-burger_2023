@@ -1,4 +1,4 @@
-import {sendUserRequest, sendUserFailed, setAuthChecked, setUser} from "./reducer";
+import {sendUserRequest, sendUserFailed, setAuthChecked, setUser, setErrorMessage} from "./reducer";
 import {forgotPass, login, logout, register, resetPass, token, user} from "../../utils/api";
 
 export function refreshToken(data) {
@@ -41,6 +41,13 @@ export function getUser(data) {
     }
 }
 
+export const setError = (err) => {
+    return (dispatch) => {
+        // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+        dispatch(setErrorMessage(err))
+    }
+}
+
 export const registrationUser = (data) => {
     return (dispatch) => {
         dispatch(sendUserRequest())
@@ -52,6 +59,9 @@ export const registrationUser = (data) => {
             } else {
                 dispatch(sendUserFailed())
             }
+        }).catch(err => {
+            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+            dispatch(setError(err))
         })
     }
 }
@@ -67,6 +77,9 @@ export const logInUser = (data) => {
             } else {
                 dispatch(sendUserFailed())
             }
+        }).catch(err => {
+            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+            dispatch(setError(err))
         })
     }
 }
@@ -78,13 +91,15 @@ export const logOutUser = (data) => {
             if (res && res.success) {
                 dispatch(setUser({
                     user: null,
-                    success: true
+                    success: false
                 }))
                 localStorage.removeItem('accessToken')
                 localStorage.removeItem('refreshToken')
             } else {
                 dispatch(sendUserFailed())
             }
+        }).catch(err => {
+            console.log(`%c ${err}`, 'background-color: #FFC0CB');
         })
     }
 }
@@ -101,6 +116,9 @@ export const forgotPassword = (data) => {
             } else {
                 dispatch(sendUserFailed())
             }
+        }).catch(err => {
+            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+            dispatch(setError(err))
         })
     }
 }
@@ -117,6 +135,9 @@ export const resetPassword = (data) => {
             } else {
                 dispatch(sendUserFailed())
             }
+        }).catch(err => {
+            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+            dispatch(setError(err))
         })
     }
 }

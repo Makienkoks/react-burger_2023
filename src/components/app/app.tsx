@@ -6,30 +6,36 @@ import ForgotPassword from "../../pages/forgot-password"
 import Register from "../../pages/register"
 import ResetPassword from "../../pages/reset-password"
 import NotFound404 from "../../pages/not-found"
-import {Routes, Route, useLocation, useNavigate, useResolvedPath } from 'react-router-dom'
+import {Routes, Route, useLocation, useNavigate} from 'react-router-dom'
 import IngredientPage from "../../pages/ingredient-page";
 import Protected from "../protected-route/protected-route";
 import Modal from "../modal/modal";
 import DefaultLayout from "../../layouts/default";
 import ProfileLayout from "../../layouts/profile";
-import {useDispatch, useSelector} from "react-redux";
 import {loadIngredients} from "../../services/ingredients/actions";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getUser} from "../../services/user/actions";
 import Order from "../../pages/order";
+import { useDispatch, useSelector } from '../../services/hooks';
+import {getIngredients, ingredientsIsError, ingredientsIsLoading} from "../../services/ingredients/selectors";
+import * as H from 'history'
 const App = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
 
-    let state = 'state' in location ? location.state : null
-    let backgroundLocation = state && 'backgroundLocation' in state ? state.backgroundLocation : null
-    let idIngredient = useResolvedPath().pathname.replace('/ingredients/','')
+    let state = location.state as {backgroundLocation: H.Location}
+    let backgroundLocation = state && state.backgroundLocation
 
-    const ingredients = useSelector( (store) => store.ingredients.ingredients);
+    let idIngredient = location.pathname.replace('/ingredients/','')
+
+    const ingredients = useSelector(getIngredients);
+    const isLoading = useSelector(ingredientsIsLoading);
+    const error = useSelector(ingredientsIsError);
+
     const ingredient = useMemo(() => {
-        const arr = ingredients && 'data' in ingredients ? ingredients.data : null
-        return arr ? arr.filter(item => item._id === idIngredient)[0] : null
+        const arr = ingredients
+        return arr ? arr.filter((item) => item._id === idIngredient)[0] : null
     }, [ingredients, idIngredient])
 
     useEffect(() => {
@@ -62,11 +68,11 @@ const App = () => {
                     <Route path='/ingredients/:id' element={
                         <Modal title='Детали ингредиента'
                                onClose={() => navigate(backgroundLocation, {state: {}})}>
-                            {'isLoading' && ingredients.isLoading && 'Загрузка...'}
-                            {'error' && ingredients.error && 'Произошла ошибка'}
+                            {'isLoading' && isLoading && 'Загрузка...'}
+                            {'error' && error && 'Произошла ошибка'}
                             {
-                                !('isLoading' && ingredients.isLoading) &&
-                                !('error' && ingredients.error) && ingredient &&
+                                !('isLoading' && isLoading) &&
+                                !('error' && error) && ingredient &&
                             <IngredientDetails item={ingredient} showDetails />
                             }
                         </Modal>

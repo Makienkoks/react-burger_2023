@@ -4,7 +4,8 @@ const initialState = {
     user: null,
     isLoading: false,
     success: false,
-    isAuthChecked: false
+    isAuthChecked: false,
+    error: ''
 };
 
 export const userSlice = createSlice({
@@ -25,10 +26,13 @@ export const userSlice = createSlice({
         },
         setAuthChecked: (state, action) => {
             state.isAuthChecked = action.payload;
+        },
+        setErrorMessage: (state, action) => {
+            state.error = action.payload
         }
     }
 });
 
-export const { setAuthChecked, setUser, sendUserRequest,  sendUserFailed} = userSlice.actions;
+export const { setAuthChecked, setUser, sendUserRequest,  sendUserFailed, setErrorMessage} = userSlice.actions;
 
 export default userSlice.reducer;

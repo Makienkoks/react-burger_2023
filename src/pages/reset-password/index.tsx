@@ -1,21 +1,34 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import styles from "../reset-password/reset-password.module.css";
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import {resetPassword} from "../../services/user/actions";
-import {useDispatch, useSelector} from "react-redux";
+import {resetPassword, setError} from "../../services/user/actions";
+import { useDispatch, useSelector } from '../../services/hooks';
+import { TResetFormFields } from "../../utils/types";
+import {RootState} from "../../services/store";
+import useForm from "../../hooks/useForm";
+
 const ResetPassword = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const allowResetPassword = localStorage.getItem('allowResetPassword') === 'allow'
     const dispatch = useDispatch()
     const { from } = location.state || { from: { pathname: "/"}}
-    const [formData, setValue] = useState({
-        password: '',
-        token: ''
-    });
-    const isLoading = useSelector( (store) => store.user.isLoading);
-    const success = useSelector( (store) => store.user.success);
+    
+    const { values, handleChange } = useForm<TResetFormFields>();
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
+
+    const isLoading = useSelector( (store: RootState) => store.user.isLoading);
+    const success = useSelector( (store: RootState) => store.user.success);
 
     useEffect(() => {
         if (!isLoading && success && !allowResetPassword) {
@@ -31,21 +44,18 @@ const ResetPassword = () => {
             localStorage.removeItem('allowResetPassword')
         }
     },[]);
-    const handleChange = (e) => {
-        e.preventDefault()
-        setValue({ ...formData, [e.target.name]: e.target.value });
-    }
-    const onSubmit = (e) => {
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
-        for (let key in formData) {
-            if (formData[key] === '') {
+        for (let key in values) {
+            if (values[key as keyof TResetFormFields] === '') {
                 sendData = false
                 break
             }
         }
         if (sendData) {
-            dispatch(resetPassword(formData))
+            dispatch(resetPassword(values))
             localStorage.removeItem('allowResetPassword')
         }
     }
@@ -56,22 +66,22 @@ const ResetPassword = () => {
             <PasswordInput
                 onChange={ handleChange }
                 placeholder={'Введите новый пароль'}
-                value={ formData.password }
+                value={ values.password || '' }
                 name={'password'}
                 extraClass="mb-6"
-                errorText={'Ненадёжный пароль'}
             />
             <Input
                 type={'text'}
                 placeholder={'Введите код из письма'}
                 onChange={ handleChange }
-                value={formData.token}
+                value={ values.token || '' }
                 name={'token'}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-6"
             />
-            <Button extraClass="mb-10" htmlType="submit" type="primary" size="medium" onClick={onSubmit}>
+            <p className={`input__error`}>{error}</p>
+            <Button extraClass="mb-10" htmlType="submit" type="primary" size="medium">
                 Сохранить
             </Button>
             <div className="mt-10 mb-4 text text_type_main-default text_color_inactive">

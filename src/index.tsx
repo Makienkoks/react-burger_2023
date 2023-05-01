@@ -5,11 +5,9 @@ import './index.css';
 import App from './components/app/app';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { configureStore } from "./services/store";
+import { store } from "./services/store";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import { DndProvider } from 'react-dnd';
-
-const store = configureStore();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

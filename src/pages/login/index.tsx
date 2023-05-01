@@ -1,53 +1,59 @@
-import React, { useState } from 'react';
+import React, {useEffect} from 'react';
 import styles from "../login/login.module.css";
 import { Link } from 'react-router-dom';
 import { PasswordInput, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import {logInUser} from "../../services/user/actions";
-import {useDispatch} from "react-redux";
+import {logInUser, setError} from "../../services/user/actions";
+import {useDispatch, useSelector} from '../../services/hooks';
+import {TFormFields} from "../../utils/types";
+import useForm from "../../hooks/useForm";
+import {RootState} from "../../services/store";
+
 const Login = () => {
     const dispatch = useDispatch()
-    const [formData, setValue] = useState({
-        email: '',
-        password: '',
-    });
-    const handleChange = (e) => {
-        e.preventDefault()
-        setValue({ ...formData, [e.target.name]: e.target.value });
-    }
-    const onSubmit = (e) => {
+    const { values, handleChange } = useForm<TFormFields>();
+
+    const error = useSelector((store: RootState) => store.user.error)
+    useEffect(() => {
+        dispatch(setError(null))
+    }, [dispatch, values])
+    useEffect(() => {
+        return () => {
+            dispatch(setError(null))
+        }
+    }, [])
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let sendData = true
-        for (let key in formData) {
-            if (formData[key] === '') {
+        for (let key in values) {
+            if (values[key as keyof TFormFields] === '') {
                 sendData = false
                 break
             }
         }
         if (sendData) {
-            dispatch(logInUser(formData))
+            dispatch(logInUser(values))
         }
     }
 
     return (
-        <form className={`${styles.form} pl-5 pr-5`} onSubmit={ onSubmit }>
+        <form className={`${styles.form} pl-5 pr-5`} onSubmit={ handleSubmit }>
             <h1 className={`text text_type_main-medium mb-6 ${styles.text_center}`}>Вход</h1>
             <EmailInput
-                type="email"
                 placeholder="E-mail"
-                value={ formData.email }
+                value={ values.email || '' }
                 name="email"
                 extraClass="mb-6"
                 required
                 onChange={ handleChange }
-                errorText={'Введите корректный e-mail'}
             />
             <PasswordInput
                 onChange={ handleChange }
-                value={ formData.password }
+                value={ values.password  || ''}
                 name={'password'}
                 extraClass="mb-6"
-                error={false}
             />
+            <p className={`input__error`}>{error}</p>
             <Button htmlType="submit" extraClass="mb-10" type="primary" size="medium">
                 Вход
             </Button>

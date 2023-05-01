@@ -1,17 +1,20 @@
 import React from 'react'
 import styles from "./button.module.css";
-import PropTypes from "prop-types";
 import { BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import {NavLink} from 'react-router-dom';
-const Button = (props) => {
-    const { title, href, icon } = props
-    const getClass = (isActive) => {
+type TButton = {
+    href: string,
+    title: string,
+    icon?: string
+}
+const Button = ({ title, href, icon }: TButton) => {
+    const getClass = (isActive: boolean) => {
         return [ styles.button, isActive ? styles.active : styles.inactive ].join(' ')
     }
-    const getTypeIcon = (isActive) => {
+    const getTypeIcon = (isActive: boolean) => {
         return isActive ? 'primary' : 'secondary'
     }
-    const getIcon = (iconName, isActive) => {
+    const getIcon = (iconName: string, isActive: boolean) => {
         switch (iconName) {
             case 'BurgerIcon':
                 return <BurgerIcon type={getTypeIcon(isActive)} />
@@ -33,20 +36,12 @@ const Button = (props) => {
                         {getIcon(icon, isActive)}
                     </span>
                     }
-                    <span className={icon ? styles.title : null}>
+                    <span className={`${icon ? styles.title : null}`}>
                         {title}
                     </span>
                 </>
             ) }
         </NavLink>
-    );
-}
-// Button.defaultProps  = {
-//     title: 'Нажми на меня! :))))'
-// }
-Button.propTypes = {
-    href: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    icon: PropTypes.string
+    )
 }
 export default Button
