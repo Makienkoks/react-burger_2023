@@ -1,33 +1,45 @@
-import {createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+    GET_INGREDIENTS_FAILED,
+    GET_INGREDIENTS_REQUEST,
+    GET_INGREDIENTS_SUCCESS,
+    TGetIngredientsActions
+} from './actions';
+
 import {TIngredients} from "../../utils/types";
+
 const initialState: TIngredientsData = {
-    ingredients: [],
+    data: [],
     isLoading: false,
-    error: true,
+    success: true,
 };
 export type TIngredientsData = {
-    ingredients: Array<TIngredients>,
+    data: Array<TIngredients>,
     isLoading: boolean,
-    error: boolean,
+    success: boolean,
 }
-export const ingredientsSlice = createSlice({
-    name: 'ingredients',
-    initialState,
-    reducers: {
-        getIngredients: (state, action: PayloadAction<TIngredientsData | null>) => {
-            state.isLoading = true
-        },
-        getIngredientsSuccess: (state, action) => {
-            state.isLoading = false
-            state.ingredients = action.payload.data
-            state.error = !action.payload.success
-
-        },
-        getIngredientsFailed: (state, action) => {
-            state.isLoading = false
-            state.error = true
+export const reducer = (state = initialState, action: TGetIngredientsActions) => {
+    switch (action.type) {
+        case GET_INGREDIENTS_REQUEST: {
+            return {
+                ...state,
+                isLoading: true
+            };
+        }
+        case GET_INGREDIENTS_SUCCESS: {
+            return { ...state,
+                isLoading: false,
+                data: action.payload,
+                success: false
+            };
+        }
+        case GET_INGREDIENTS_FAILED: {
+            return { ...state,
+                isLoading: false,
+                success: true
+            };
+        }
+        default: {
+            return state;
         }
     }
-})
-export const { getIngredients, getIngredientsSuccess, getIngredientsFailed} = ingredientsSlice.actions;
-export default ingredientsSlice.reducer;
+};

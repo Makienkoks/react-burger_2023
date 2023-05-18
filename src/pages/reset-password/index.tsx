@@ -55,7 +55,7 @@ const ResetPassword = () => {
             }
         }
         if (sendData) {
-            dispatch(resetPassword(values))
+            dispatch(resetPassword(values as TResetFormFields))
             localStorage.removeItem('allowResetPassword')
         }
     }

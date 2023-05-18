@@ -9,8 +9,8 @@ import DraggableItem from "../draggable-item/draggable-item";
 import { sendOrder } from "../../services/order/actions";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from '../../services/hooks';
-import {TIngredient} from "../../utils/types";
-import {addIngredient, changeIngredient, deleteIngredient} from "../../services/orderList/reducer";
+import {TIngredient, TOrder} from "../../utils/types";
+import {addIngredient, changeIngredient, deleteIngredient} from "../../services/orderList/actions";
 import {orderIngredients, orderBun} from "../../services/orderList/selectors";
 const BurgerConstructor = () => {
     const navigate = useNavigate()
@@ -41,13 +41,13 @@ const BurgerConstructor = () => {
     const onClick = () => {
         if (user) {
             toggleModal(true)
-            const orderId: Array<string> = []
+            const data: TOrder = {'ingredients': []}
             if (bun || list) {
                 const order = bun ? [bun, ...list, bun] : [...list]
                 order.forEach(item => {
-                    orderId.push(item._id)
+                    data.ingredients.push(item._id)
                 })
-                dispatch(sendOrder({'ingredients': orderId}));
+                dispatch(sendOrder(data));
             }
         } else {
             navigate('/login')
@@ -56,17 +56,6 @@ const BurgerConstructor = () => {
     const toggleModal = (isVisible: boolean | ((prevState: boolean) => boolean)) => {
         setVisible(isVisible)
     }
-
-    const modal = (
-        <>
-            {visible &&
-            <Modal onClose={toggleModal}>
-                <OrderDetails/>
-            </Modal>
-            }
-        </>
-    )
-
     const [{ outline }, dropRef] = useDrop({
         accept: 'ingredients',
         drop(data: TIngredient) {
@@ -179,7 +168,11 @@ const BurgerConstructor = () => {
                     Оформить заказ
                 </Button>
             </div>
-            {modal}
+            {visible &&
+                <Modal onClose={toggleModal}>
+                    <OrderDetails/>
+                </Modal>
+            }
         </div>
     )
 }

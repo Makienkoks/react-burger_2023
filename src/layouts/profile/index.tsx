@@ -7,10 +7,10 @@ import { useDispatch } from '../../services/hooks';
 
 const ProfileLayout = () => {
     const profilePath = useMatch('/profile')
-    const profileOrderPath = useMatch('/profile/order')
+    const profileOrderPath = useMatch('/profile/orders')
     const dispatch = useDispatch()
 
-    const refreshToken = {token: localStorage.getItem('refreshToken')}
+    const refreshToken = {token: '' + localStorage.getItem('refreshToken')}
 
     const handleClick = () => {
         dispatch(logOutUser(refreshToken))
@@ -28,7 +28,7 @@ const ProfileLayout = () => {
                                 <NavLink className={profilePath ? styles.active_link : styles.link} to={'/profile'}>Профиль</NavLink>
                             </li>
                             <li className="pt-4 pb-4">
-                                <NavLink className={profileOrderPath ? styles.active_link : styles.link} to={'/profile/order'}>История заказов</NavLink>
+                                <NavLink className={profileOrderPath ? styles.active_link : styles.link} to={'/profile/orders'}>История заказов</NavLink>
                             </li>
                             <li className="pt-4 pb-4">
                                 <NavLink onClick={ handleClick } className={styles.link} to={'#'}>

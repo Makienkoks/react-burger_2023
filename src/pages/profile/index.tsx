@@ -77,7 +77,7 @@ const Profile = () => {
             password: ''
         }
         if (values && 'password' in values && values.password) {
-            dispatch(getUser(values))
+            dispatch(getUser(values as TUser))
         } else {
             data.name = values.name as string
             data.email = values.email as string

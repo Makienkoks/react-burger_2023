@@ -1,15 +1,26 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import {useSelector} from "react-redux";
-import {RootState} from "../../services/store";
+import {useDispatch, useSelector} from '../../services/hooks';
+import {getNumOrder, sendOrderIsError, sendOrderIsLoading} from "../../services/order/selectors";
+import {addIngredient} from "../../services/orderList/actions";
 const OrderDetails = () => {
-    // @ts-ignore
-    const numOrder = useSelector((store: RootState) => store.sendOrder.order.number);
-    // @ts-ignore
-    const isLoading = useSelector((store: RootState) => store.sendOrder.order.isLoading);
-    // @ts-ignore
-    const success = useSelector((store: RootState) => store.sendOrder.order.success);
+
+    const numOrder = useSelector(getNumOrder);
+    const isLoading = useSelector(sendOrderIsLoading);
+    const success = useSelector(sendOrderIsError);
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (!isLoading && success) {
+            dispatch(addIngredient({
+                bun: null,
+                ingredients: []
+            }))
+        }
+    }, [numOrder, isLoading, success])
+
     return (
         <>
             {isLoading && !success && 'Загрузка...'}

@@ -2,9 +2,8 @@ import React, {useEffect} from 'react';
 import styles from "../forgot-password/forgot-password.module.css";
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import {forgotPassword, setError} from "../../services/user/actions";
+import {forgotPassword, SEND_USER_FAILED, setError} from "../../services/user/actions";
 import { useDispatch, useSelector } from '../../services/hooks';
-import {sendUserFailed} from "../../services/user/reducer";
 import {TForgotFormFields} from "../../utils/types";
 import {RootState} from "../../services/store";
 import useForm from "../../hooks/useForm";
@@ -34,14 +33,14 @@ const ForgotPassword = () => {
         if (!isLoading && success) {
             localStorage.setItem('allowResetPassword', 'allow')
             navigate('/reset-password', {state: {from: location}})
-            dispatch(sendUserFailed(null))
+            dispatch({ type: SEND_USER_FAILED })
         }
-    },[isLoading, success, dispatch, location, navigate]);
+    },[isLoading, success, location, navigate]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (values.email !== '') {
-            dispatch(forgotPassword(values))
+            dispatch(forgotPassword(values as TForgotFormFields))
         }
     }
     return (

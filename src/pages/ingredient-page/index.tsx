@@ -12,19 +12,17 @@ const IngredientPage = () => {
     const error = useSelector(ingredientsIsError);
 
     const ingredient = useMemo(() => {
-        return ingredients ? ingredients.filter(item => item._id === id)[0] : null
+        return ingredients.filter(item => item._id === id)[0]
     }, [ingredients, id])
     return (
         <div className={styles.block}>
-            {'isLoading' && isLoading && 'Загрузка...'}
-            {'error' && error && 'Произошла ошибка'}
-            {
-                !('isLoading' && isLoading) &&
-                !('error' && error) && ingredient &&
+            {isLoading && error && 'Загрузка...'}
+            {!isLoading && error && 'Произошла ошибка'}
+            {!isLoading && !error && ingredient ? (
                 <>
                     <h1>Детали ингредиента</h1>
                     <IngredientDetails showDetails item={ingredient}/>
-                </>
+                </>) : ('А не бывает такого ингредиента :-(')
             }
         </div>
     );

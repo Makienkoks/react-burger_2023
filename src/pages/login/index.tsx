@@ -32,7 +32,7 @@ const Login = () => {
             }
         }
         if (sendData) {
-            dispatch(logInUser(values))
+            dispatch(logInUser(values as TFormFields))
         }
     }
 

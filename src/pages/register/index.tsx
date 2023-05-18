@@ -33,7 +33,7 @@ const Register = () => {
             }
         }
         if (sendData) {
-            dispatch(registrationUser(values))
+            dispatch(registrationUser(values as TUser))
         }
     }
 

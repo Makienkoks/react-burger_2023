@@ -50,63 +50,65 @@ const BurgerIngredients = ():JSX.Element => {
         }
     };
     return (
-        <>
-            {isLoading && error && 'Загрузка...'}
-            {!isLoading && error && 'Произошла ошибка'}
+        <div className={styles.ingredients}>
+            {isLoading && error && 'Загрузка...'
+            }
+            {!isLoading && error && 'Произошла ошибка'
+            }
             {!isLoading && !error && ingredients &&
-                <div className={styles.ingredients}>
-                    <h1 className={styles.title}>
-                        Соберите бургер
-                    </h1>
-                    <div className={styles.tabs}>
-                        <Tab value="bun" active={current === 'bun'} onClick={tabClick('bun')}>
-                            Булки
-                        </Tab>
-                        <Tab value="sauce" active={current === 'sauce'} onClick={tabClick('sauce')}>
-                            Соусы
-                        </Tab>
-                        <Tab value="main" active={current === 'main'} onClick={tabClick('main')}>
-                            Начинки
-                        </Tab>
+            <>
+                <h1 className={styles.title}>
+                    Соберите бургер
+                </h1>
+                <div className={styles.tabs}>
+                    <Tab value="bun" active={current === 'bun'} onClick={tabClick('bun')}>
+                        Булки
+                    </Tab>
+                    <Tab value="sauce" active={current === 'sauce'} onClick={tabClick('sauce')}>
+                        Соусы
+                    </Tab>
+                    <Tab value="main" active={current === 'main'} onClick={tabClick('main')}>
+                        Начинки
+                    </Tab>
+                </div>
+                <div className={styles.tab_content} ref={containerRef} onScroll={handleScroll}>
+                    <p className={`text text_type_main-medium mb-6`} ref={bunRef}>
+                        Булки
+                    </p>
+                    <div className={styles.blocks}>
+                        {buns.map(item =>
+                            <IngredientDetails key={item._id}
+                                               item={item}
+                                               onCardClick={listItemClick}
+                            />
+                        )}
                     </div>
-                    <div className={styles.tab_content} ref={containerRef} onScroll={handleScroll}>
-                        <p className={`text text_type_main-medium mb-6`} ref={bunRef}>
-                            Булки
-                        </p>
-                        <div className={styles.blocks}>
-                            {buns.map(item =>
-                                <IngredientDetails key={item._id}
-                                                   item={item}
-                                                   onCardClick={listItemClick}
-                                />
-                            )}
-                        </div>
-                        <p className={`text text_type_main-medium mb-6`} ref={sauceRef}>
-                            Соусы
-                        </p>
-                        <div className={styles.blocks}>
-                            {sauces.map(item =>
-                                <IngredientDetails key={item._id}
-                                                   item={item}
-                                                   onCardClick={listItemClick}
-                                />
-                            )}
-                        </div>
-                        <p className={`text text_type_main-medium mb-6`} ref={mainRef}>
-                            Начинки
-                        </p>
-                        <div className={styles.blocks}>
-                            {mains.map(item =>
-                                <IngredientDetails key={item._id}
-                                                   item={item}
-                                                   onCardClick={listItemClick}
-                                />
-                            )}
-                        </div>
+                    <p className={`text text_type_main-medium mb-6`} ref={sauceRef}>
+                        Соусы
+                    </p>
+                    <div className={styles.blocks}>
+                        {sauces.map(item =>
+                            <IngredientDetails key={item._id}
+                                               item={item}
+                                               onCardClick={listItemClick}
+                            />
+                        )}
+                    </div>
+                    <p className={`text text_type_main-medium mb-6`} ref={mainRef}>
+                        Начинки
+                    </p>
+                    <div className={styles.blocks}>
+                        {mains.map(item =>
+                            <IngredientDetails key={item._id}
+                                               item={item}
+                                               onCardClick={listItemClick}
+                            />
+                        )}
                     </div>
                 </div>
+            </>
             }
-        </>
+        </div>
     );
 }
 export default BurgerIngredients

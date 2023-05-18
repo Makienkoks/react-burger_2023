@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import styles from './ingredient-details.module.css';
-import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import {CurrencyIcon, Counter} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 import {TIngredients} from "../../utils/types";
@@ -52,7 +52,8 @@ const IngredientDetails = ({ item, onCardClick, showDetails }: TIngredientDetail
                 :
                 <>
                     {count &&
-                        <p className={`${styles.count} text text_type_digits-default`}>{count}</p>
+                        <Counter count={count} size="default" extraClass={`${styles.count} m-1`} />
+                        // <p className={`${styles.count} text text_type_digits-default`}>{count}</p>
                     }
                     <img src={item.image} className="mb-1" alt={item.name}></img>
                     <div className={styles.price}>

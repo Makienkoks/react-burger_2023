@@ -12,7 +12,7 @@ const AppHeader = () => {
                         <Button href='/' title='Конструктор' icon='BurgerIcon' />
                     </div>
                     <div className="p-1">
-                        <Button href='/profile/order' title='Лента заказов' icon='ListIcon' />
+                        <Button href='/feed' title='Лента заказов' icon='ListIcon' />
                     </div>
                 </div>
                 <div className={styles.logo}>

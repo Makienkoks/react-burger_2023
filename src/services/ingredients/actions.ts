@@ -1,18 +1,46 @@
 import {getIngredientsData} from '../../utils/api'
-import {getIngredients, getIngredientsSuccess, getIngredientsFailed} from "./reducer";
-import {AppDispatch} from "../store";
-export const loadIngredients = () => {
-  return (dispatch: AppDispatch) => {
-    dispatch(getIngredients(null))
+import { AppThunk } from "../store";
+import {TIngredients} from "../../utils/types";
+export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST'
+export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS'
+export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED'
+
+export interface IGetIngredientsRequestAction {
+  readonly type: typeof GET_INGREDIENTS_REQUEST;
+}
+export interface IGetIngredientsRequestSuccessAction {
+  readonly payload: Array<TIngredients>;
+  readonly type: typeof GET_INGREDIENTS_SUCCESS;
+}
+export interface IGetIngredientsRequestFailedAction {
+  readonly type: typeof GET_INGREDIENTS_FAILED;
+}
+export type TGetIngredientsActions =
+    | IGetIngredientsRequestAction
+    | IGetIngredientsRequestSuccessAction
+    | IGetIngredientsRequestFailedAction
+
+export const loadIngredients = (): AppThunk => {
+  return (dispatch) => {
+    dispatch({
+      type: GET_INGREDIENTS_REQUEST
+    })
     getIngredientsData().then(res => {
       if (res && res.success) {
-        dispatch(getIngredientsSuccess(res))
+        dispatch({
+          type: GET_INGREDIENTS_SUCCESS,
+          payload: res.data
+        })
       } else {
-        dispatch(getIngredientsFailed(null))
+        dispatch({
+          type: GET_INGREDIENTS_FAILED
+        })
       }
     }).catch(err => {
       // console.log(`%c ${err}`, 'background-color: #FFC0CB');
-      dispatch(getIngredientsFailed(null))
+      dispatch({
+        type: GET_INGREDIENTS_FAILED
+      })
     })
   }
 }
