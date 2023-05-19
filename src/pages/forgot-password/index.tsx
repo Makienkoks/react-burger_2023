@@ -13,7 +13,7 @@ const ForgotPassword = () => {
 
     const { values, handleChange } = useForm<TForgotFormFields>();
 
-    const error = useSelector((store: RootState) => store.user.error)
+    const error = useSelector((store) => store.user.error)
     useEffect(() => {
         dispatch(setError(null))
     }, [dispatch, values])

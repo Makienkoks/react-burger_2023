@@ -5,7 +5,6 @@ import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burg
 import {resetPassword, setError} from "../../services/user/actions";
 import { useDispatch, useSelector } from '../../services/hooks';
 import { TResetFormFields } from "../../utils/types";
-import {RootState} from "../../services/store";
 import useForm from "../../hooks/useForm";
 
 const ResetPassword = () => {
@@ -17,7 +16,7 @@ const ResetPassword = () => {
     
     const { values, handleChange } = useForm<TResetFormFields>();
 
-    const error = useSelector((store: RootState) => store.user.error)
+    const error = useSelector((store) => store.user.error)
     useEffect(() => {
         dispatch(setError(null))
     }, [dispatch, values])
@@ -27,8 +26,8 @@ const ResetPassword = () => {
         }
     }, [])
 
-    const isLoading = useSelector( (store: RootState) => store.user.isLoading);
-    const success = useSelector( (store: RootState) => store.user.success);
+    const isLoading = useSelector( (store) => store.user.isLoading);
+    const success = useSelector( (store) => store.user.success);
 
     useEffect(() => {
         if (!isLoading && success && !allowResetPassword) {

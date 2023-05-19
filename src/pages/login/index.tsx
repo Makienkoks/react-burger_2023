@@ -6,13 +6,12 @@ import {logInUser, setError} from "../../services/user/actions";
 import {useDispatch, useSelector} from '../../services/hooks';
 import {TFormFields} from "../../utils/types";
 import useForm from "../../hooks/useForm";
-import {RootState} from "../../services/store";
 
 const Login = () => {
     const dispatch = useDispatch()
     const { values, handleChange } = useForm<TFormFields>();
 
-    const error = useSelector((store: RootState) => store.user.error)
+    const error = useSelector((store) => store.user.error)
     useEffect(() => {
         dispatch(setError(null))
     }, [dispatch, values])
