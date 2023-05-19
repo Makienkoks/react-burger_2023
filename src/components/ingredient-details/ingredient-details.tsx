@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import styles from './ingredient-details.module.css';
 import {CurrencyIcon, Counter} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useSelector} from "react-redux";
+import {useSelector} from "../../services/hooks";
 import {useDrag} from "react-dnd";
 import {TIngredients} from "../../utils/types";
 import {RootState} from "../../services/store";
