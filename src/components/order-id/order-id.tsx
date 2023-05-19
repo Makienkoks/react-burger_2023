@@ -72,7 +72,17 @@ const OrderId = () => {
         return getIngredient(id)[0].name
     }
     const getPrice = (id: string) => {
-        return getIngredient(id)[0].price
+        let price = 0
+        if (feedId && feedId.length) {
+            feedId.map(items => {
+                items.ingredients.map(item => {
+                    if (item === id) {
+                        price = price + 1
+                    }
+                })
+            })
+        }
+        return price + ' x ' + getIngredient(id)[0].price
     }
     const getSum = (ingredients: string[]) => {
         let sum = 0
@@ -81,8 +91,6 @@ const OrderId = () => {
         })
         return sum
     }
-
-
     const content = (
         <>
             {feedId && feedId.length &&
@@ -95,7 +103,9 @@ const OrderId = () => {
                         <p className={`text text_type_main-medium mb-6`}>Состав:</p>
 
                         <div className={`${styles.list} mb-10`}>
-                            {item.ingredients.map((items, index) =>
+                            {item.ingredients.filter((ingredient, index) => {
+                                return item.ingredients.indexOf(ingredient) === index
+                            }).map((items, index) =>
                                 <div className={`${styles.item} mb-4`} key={index}>
                                     <div className={`${styles.item_block}`}>
                                         <div className={`${styles.item}`}>
