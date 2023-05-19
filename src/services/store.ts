@@ -3,7 +3,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import  { rootReducer }  from './reducer';
 import { socketMiddleware } from './middleware/socket-middleware';
-import { socketMiddlewareProfile } from './middleware/socket-middleware-profile';
 import type {} from 'redux-thunk/extend-redux'
 
 import {ThunkAction} from "redux-thunk";
@@ -26,13 +25,13 @@ import {
 
 
 import {
-    connectProfile as ProfileWsConnect,
-    disconnectProfile as ProfileWsDisconnect,
-    wsConnectingProfile as ProfileWsConnecting,
-    wsOpenProfile as ProfileWsOpen,
-    wsCloseProfile as ProfileWsClose,
-    wsMessageProfile as ProfileWsMessage,
-    wsErrorProfile as ProfileWsError
+    connect as ProfileWsConnect,
+    disconnect as ProfileWsDisconnect,
+    wsConnecting as ProfileWsConnecting,
+    wsOpen as ProfileWsOpen,
+    wsClose as ProfileWsClose,
+    wsMessage as ProfileWsMessage,
+    wsError as ProfileWsError
 } from "./feed-profile/actions";
 
 export type RootState = ReturnType<typeof rootReducer>
@@ -58,16 +57,16 @@ const wsActions = {
 };
 
 const wsActionsProfile = {
-    wsConnectProfile: ProfileWsConnect,
-    wsDisconnectProfile: ProfileWsDisconnect,
-    wsConnectingProfile: ProfileWsConnecting,
-    onOpenProfile: ProfileWsOpen,
-    onCloseProfile: ProfileWsClose,
-    onErrorProfile: ProfileWsError,
-    onMessageProfile: ProfileWsMessage,
+    wsConnect: ProfileWsConnect,
+    wsDisconnect: ProfileWsDisconnect,
+    wsConnecting: ProfileWsConnecting,
+    onOpen: ProfileWsOpen,
+    onClose: ProfileWsClose,
+    onError: ProfileWsError,
+    onMessage: ProfileWsMessage,
 };
 const FeedMiddleware = socketMiddleware(wsActions);
-const ProfileMiddleware = socketMiddlewareProfile(wsActionsProfile);
+const ProfileMiddleware = socketMiddleware(wsActionsProfile);
 
 export const store = configureStore({
     reducer: rootReducer,

@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import OrderList from "../../components/orders-list/orders-list";
 import {useDispatch, useSelector} from "../../services/hooks";
-import {connectProfile as connect, disconnectProfile as disconnect} from "../../services/feed-profile/actions";
+import { connect as connectProfile, disconnect as disconnectProfile } from "../../services/feed-profile/actions";
+
 import styles from "../feed/feed.module.css";
 import {ordersFeedProfile, successFeedProfile} from "../../services/feed-profile/selectors";
 const ProfileOrders = () => {
@@ -15,9 +16,9 @@ const ProfileOrders = () => {
     const url = 'wss://norma.nomoreparties.space/orders?token=' + token;
 
     useEffect(() => {
-        dispatch(connect(url));
+        dispatch(connectProfile(url));
         return () => {
-            dispatch(disconnect());
+            dispatch(disconnectProfile());
         }
     }, [dispatch]);
 

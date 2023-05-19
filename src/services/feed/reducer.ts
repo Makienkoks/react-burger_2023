@@ -26,7 +26,6 @@ export const initialState: wsFeedStore = {
     },
 };
 
-
 export const wsFeedReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(wsConnecting, (state) => {

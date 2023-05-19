@@ -1,6 +1,6 @@
 import {WebsocketStatus, TOrdersStoreData} from "../../utils/types";
 import { createReducer } from '@reduxjs/toolkit'
-import {wsOpenProfile, wsCloseProfile, wsMessageProfile, wsErrorProfile, wsConnectingProfile, connectProfile} from "./actions";
+import { wsOpen, wsClose, wsMessage, wsError, wsConnecting } from "./actions";
 
 export type wsFeedProfileStore = {
     status: WebsocketStatus,
@@ -26,23 +26,22 @@ export const initialState: wsFeedProfileStore = {
     },
 };
 
-
 export const wsFeedProfileReducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(wsConnectingProfile, (state) => {
+        .addCase(wsConnecting, (state) => {
             state.status = WebsocketStatus.CONNECTING;
         })
-        .addCase(wsOpenProfile, (state) => {
+        .addCase(wsOpen, (state) => {
             state.status = WebsocketStatus.ONLINE;
             state.connectionError = '';
         })
-        .addCase(wsCloseProfile, (state) => {
+        .addCase(wsClose, (state) => {
             state.status = WebsocketStatus.OFFLINE;
         })
-        .addCase(wsErrorProfile, (state, action) => {
+        .addCase(wsError, (state, action) => {
             state.connectionError = action.payload;
         })
-        .addCase(wsMessageProfile, (state, action) => {
+        .addCase(wsMessage, (state, action) => {
             state.data = action.payload
         })
 })

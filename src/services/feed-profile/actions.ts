@@ -1,18 +1,18 @@
 import { createAction } from '@reduxjs/toolkit';
 import {TOrdersStoreData} from "../../utils/types";
 
-export const connectProfile = createAction<string, 'FEED_PROFILE_CONNECT'>('FEED_PROFILE_CONNECT');
-export const disconnectProfile = createAction('FEED_PROFILE_DISCONNECT');
-export const wsConnectingProfile = createAction('FEED_PROFILE_CONNECTING');
-export const wsOpenProfile = createAction('FEED_PROFILE_OPEN');
-export const wsCloseProfile = createAction('FEED_PROFILE_CLOSE');
-export const wsMessageProfile = createAction<TOrdersStoreData, 'FEED_PROFILE_MESSAGE'>('FEED_PROFILE_MESSAGE');
-export const wsErrorProfile = createAction<string, 'FEED_PROFILE_ERROR'>('FEED_PROFILE_ERROR');
+export const connect = createAction<string, 'FEED_PROFILE_CONNECT'>('FEED_PROFILE_CONNECT');
+export const disconnect = createAction('FEED_PROFILE_DISCONNECT');
+export const wsConnecting = createAction('FEED_PROFILE_CONNECTING');
+export const wsOpen = createAction('FEED_PROFILE_OPEN');
+export const wsClose = createAction('FEED_PROFILE_CLOSE');
+export const wsMessage = createAction<TOrdersStoreData, 'FEED_PROFILE_MESSAGE'>('FEED_PROFILE_MESSAGE');
+export const wsError = createAction<string, 'FEED_PROFILE_ERROR'>('FEED_PROFILE_ERROR');
 
-export type TWsFeedProfileActions = ReturnType<typeof connectProfile>
-    | ReturnType<typeof disconnectProfile>
-    | ReturnType<typeof wsConnectingProfile>
-    | ReturnType<typeof wsOpenProfile>
-    | ReturnType<typeof wsCloseProfile>
-    | ReturnType<typeof wsMessageProfile>
-    | ReturnType<typeof wsErrorProfile>;
+export type TWsFeedProfileActions = ReturnType<typeof connect>
+    | ReturnType<typeof disconnect>
+    | ReturnType<typeof wsConnecting>
+    | ReturnType<typeof wsOpen>
+    | ReturnType<typeof wsClose>
+    | ReturnType<typeof wsMessage>
+    | ReturnType<typeof wsError>;
