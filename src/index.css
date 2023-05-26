@@ -30,3 +30,11 @@ code {
 img {
   max-width: 100%;
 }
+#root {
+  position: relative;
+  z-index: 1;
+}
+#modals {
+  position: relative;
+  z-index: 2;
+}

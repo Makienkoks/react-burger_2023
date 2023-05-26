@@ -6,14 +6,13 @@ import {registrationUser, setError} from "../../services/user/actions";
 import {useDispatch, useSelector} from '../../services/hooks';
 import { TUser } from "../../utils/types";
 import useForm from "../../hooks/useForm";
-import {RootState} from "../../services/store";
 
 const Register = () => {
     const dispatch = useDispatch()
 
     const { values, handleChange } = useForm<TUser>();
 
-    const error = useSelector((store: RootState) => store.user.error)
+    const error = useSelector((store) => store.user.error)
     useEffect(() => {
         dispatch(setError(null))
     }, [dispatch, values])
@@ -33,7 +32,7 @@ const Register = () => {
             }
         }
         if (sendData) {
-            dispatch(registrationUser(values))
+            dispatch(registrationUser(values as TUser))
         }
     }
 

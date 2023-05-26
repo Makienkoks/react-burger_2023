@@ -1,18 +1,17 @@
 import React, {useEffect} from 'react'
 import styles from './ingredient-details.module.css';
-import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useSelector} from "react-redux";
+import {CurrencyIcon, Counter} from "@ya.praktikum/react-developer-burger-ui-components";
+import {useSelector} from "../../services/hooks";
 import {useDrag} from "react-dnd";
 import {TIngredients} from "../../utils/types";
-import {RootState} from "../../services/store";
 type TIngredientDetails = {
     item: TIngredients,
     onCardClick?: (arg: TIngredients) => void;
     showDetails?: boolean,
 }
 const IngredientDetails = ({ item, onCardClick, showDetails }: TIngredientDetails):JSX.Element => {
-    const list = useSelector((store: RootState) => store.orderList.ingredients);
-    const bun = useSelector((store: RootState) => store.orderList.bun);
+    const list = useSelector((store) => store.orderList.ingredients);
+    const bun = useSelector((store) => store.orderList.bun);
 
     const [count, setCount] = React.useState<number | null>()
 
@@ -52,7 +51,8 @@ const IngredientDetails = ({ item, onCardClick, showDetails }: TIngredientDetail
                 :
                 <>
                     {count &&
-                        <p className={`${styles.count} text text_type_digits-default`}>{count}</p>
+                        <Counter count={count} size="default" extraClass={`${styles.count} m-1`} />
+                        // <p className={`${styles.count} text text_type_digits-default`}>{count}</p>
                     }
                     <img src={item.image} className="mb-1" alt={item.name}></img>
                     <div className={styles.price}>

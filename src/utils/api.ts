@@ -1,30 +1,27 @@
 import {getResponse} from './utils';
-import {TResetFormFields, TUser} from "./types";
+import {TForgotFormFields, TFormFields, TOrder, TResetFormFields, TToken, TUser} from "./types";
 
 const apiConfig = {
   baseUrl: 'https://norma.nomoreparties.space/api'
-}
-
-export type TOrder = {
-  ingredients: [number]
 }
 
 export const getIngredientsData = async () => {
   return await fetch(`${apiConfig.baseUrl}/ingredients`).then(getResponse)
 }
 
-export const send = async (data:TOrder) => {
+export const send = async (data: TOrder) => {
   const requestOptions = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      'Content-Type': 'application/json;charset=utf-8',
+        Authorization: '' + localStorage.getItem('accessToken'),
     },
     body: JSON.stringify(data)
   }
   return await fetch(`${apiConfig.baseUrl}/orders`, requestOptions).then(getResponse)
 }
 
-export const user = async  (data:TUser | null) => {
+export const user = async (data?:TUser | null) => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -49,7 +46,7 @@ export const register = async (data:TUser) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/register`, requestOptions).then(getResponse)
 }
-export const logout = async (data: { token: string }) => {
+export const logout = async (data: TToken) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -59,7 +56,7 @@ export const logout = async (data: { token: string }) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/logout`, requestOptions).then(getResponse)
 }
-export const login = async (data: { email: string, password: string }) => {
+export const login = async (data: TFormFields) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -69,7 +66,7 @@ export const login = async (data: { email: string, password: string }) => {
   }
   return await fetch(`${apiConfig.baseUrl}/auth/login`, requestOptions).then(getResponse)
 }
-export const forgotPass = async (data: { email: string }) => {
+export const forgotPass = async (data: TForgotFormFields) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -89,7 +86,7 @@ export const resetPass = async (data: TResetFormFields) => {
   }
   return await fetch(`${apiConfig.baseUrl}/password-reset/reset`, requestOptions).then(getResponse)
 }
-export const token = async (data: { token: string }) => {
+export const token = async (data: TToken) => {
   const requestOptions = {
     method: 'POST',
     headers: {

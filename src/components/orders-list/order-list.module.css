@@ -1,0 +1,96 @@
+.order {
+    width: 100%;
+    composes: custom-scroll from global;
+    max-height: 870px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.link {
+    text-decoration: none;
+    color: #fff
+}
+.item {
+    padding: 24px;
+    display: block;
+    box-sizing: border-box;
+    background: #1C1C21;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 40px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+.top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-left: -8px;
+    margin-right: -8px;
+    justify-content: space-between;
+}
+.number {
+    padding: 0 8px;
+}
+.date {
+    padding: 0 8px;
+}
+.content {
+
+}
+.bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin-left: -8px;
+    margin-right: -8px;
+    justify-content: space-between;
+    align-items: center;
+}
+.order_list {
+    padding: 20px 0 0 20px;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0;
+}
+.list {
+    padding: 0 8px;
+}
+.price {
+    padding: 0 8px;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+.order_ingredient {
+    position: relative;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+    max-width: 64px;
+    max-height: 64px;
+    background: linear-gradient(#110000,#110000) padding-box,linear-gradient(45deg,#801AB2,#4C4CFF) border-box;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    margin-left: -20px;
+    margin-top: -20px;
+    padding: 0;
+    composes: mb-1 from global;
+}
+.order_ingredient_image {
+    width: 62px;
+    height: 62px;
+    object-fit: cover;
+}
+.done {
+    color: #00CCCC;
+}
+.revers {
+    display: flex;
+    flex-direction: column-reverse;
+}

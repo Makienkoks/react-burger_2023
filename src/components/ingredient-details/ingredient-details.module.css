@@ -54,14 +54,5 @@
     text-align: center;
 }
 .count {
-    position: absolute;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: #4C4CFF;
-    border-radius: 50%;
     right: 10px;
-    overflow: hidden;
 }

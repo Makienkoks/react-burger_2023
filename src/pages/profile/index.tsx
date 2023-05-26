@@ -3,18 +3,17 @@ import styles from "../profile/profile.module.css";
 import {PasswordInput, EmailInput, Input, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/hooks';
 import {getUser, setError} from "../../services/user/actions";
-import {RootState} from "../../services/store";
 import { TUser } from "../../utils/types";
 import useForm from "../../hooks/useForm";
 
 const Profile = () => {
     const dispatch = useDispatch()
-    const user = useSelector((store: RootState) => store.user.user)
+    const user = useSelector((store) => store.user.user)
     const [isVisible, setIsVisible] = useState<boolean>(false)
 
     const { values, handleChange } = useForm<TUser>();
 
-    const error = useSelector((store: RootState) => store.user.error)
+    const error = useSelector((store) => store.user.error)
     useEffect(() => {
         dispatch(setError(null))
     }, [dispatch, values])
@@ -77,7 +76,7 @@ const Profile = () => {
             password: ''
         }
         if (values && 'password' in values && values.password) {
-            dispatch(getUser(values))
+            dispatch(getUser(values as TUser))
         } else {
             data.name = values.name as string
             data.email = values.email as string
