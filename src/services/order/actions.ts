@@ -21,28 +21,25 @@ export type TSendOrderActions =
     | ISendOrderRequestSuccessAction
     | ISendOrderRequestFailedAction
 
-export const sendOrder = (data: TOrder): AppThunk => {
-  return (dispatch) => {
-    dispatch({
-      type: SEND_ORDER_REQUEST
-    })
-    send(data).then(res => {
-      if (res && res.success) {
-        console.log(res)
-        dispatch({
-          type: SEND_ORDER_SUCCESS,
-          payload: res
-        })
-      } else {
-        dispatch({
-          type: SEND_ORDER_FAILED
-        })
-      }
-    }).catch(err => {
-      // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+export const sendOrder = (data: TOrder): AppThunk => (dispatch) => {
+  dispatch({
+    type: SEND_ORDER_REQUEST
+  })
+  return send(data).then(res => {
+    if (res && res.success) {
+      dispatch({
+        type: SEND_ORDER_SUCCESS,
+        payload: res
+      })
+    } else {
       dispatch({
         type: SEND_ORDER_FAILED
       })
+    }
+  }).catch(err => {
+    // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+    dispatch({
+      type: SEND_ORDER_FAILED
     })
-  }
+  })
 }

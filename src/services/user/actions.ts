@@ -1,5 +1,5 @@
-import {forgotPass, login, logout, register, resetPass, token, user} from "../../utils/api";
-import {AppDispatch, AppThunk} from "../store";
+import {forgotPass, login, logout, register, resetPass, token, user, changeUserData} from "../../utils/api";
+import {AppThunk} from "../store";
 import {TForgotFormFields, TFormFields, TResetFormFields, TToken, TUser} from "../../utils/types";
 import {TUserData} from "./reducer";
 
@@ -33,61 +33,94 @@ export type TUserActions =
 | ISetAuthChecked
 | ISetErrorMessage
 
-export const refreshToken = (data: TToken): AppThunk => {
-    return (dispatch) => {
-        token(data).then(res => {
-            if (res && res.success) {
-                localStorage.setItem('accessToken', res.accessToken)
-                localStorage.setItem('refreshToken', res.refreshToken)
-                dispatch(getUser())
-            } else {
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-            }
-        }).catch(() => {
+export const refreshToken = (data: TToken): AppThunk => (dispatch) => {
+    return token(data).then(res => {
+        if (res && res.success) {
+            localStorage.setItem('accessToken', res.accessToken)
+            localStorage.setItem('refreshToken', res.refreshToken)
+            dispatch(getUser())
+        } else {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
-        })
-    }
+        }
+    }).catch(() => {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+    })
 }
 
-export const getUser = (data?:TUser | null): AppThunk => {
-    return (dispatch) => {
-        dispatch({
-            type: SEND_USER_REQUEST
-        })
-        user(data).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: SET_USER,
-                    payload: res
-                })
+export const getUser = (): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return user().then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: res
+            })
 
-            } else {
-                dispatch({
-                    type: SET_USER,
-                    payload: {
-                        user: null,
-                        success: false,
-                        isLoading: false
-                    }
-                })
-            }
-        }).catch(() => {
+        } else {
             dispatch({
-                type: SEND_USER_FAILED
+                type: SET_USER,
+                payload: {
+                    user: null,
+                    success: false,
+                    isLoading: false
+                }
             })
-            if (localStorage.getItem('refreshToken')) {
-                dispatch(refreshToken({token: '' + localStorage.getItem('refreshToken')}))
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-            }
-        }).finally(() => {
-            dispatch({
-                type: SET_AUTH_CHECKED
-            })
+        }
+    }).catch(() => {
+        dispatch({
+            type: SEND_USER_FAILED
         })
-    }
+        if (localStorage.getItem('refreshToken')) {
+            dispatch(refreshToken({token: '' + localStorage.getItem('refreshToken')}))
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+        }
+    }).finally(() => {
+        dispatch({
+            type: SET_AUTH_CHECKED
+        })
+    })
+}
+
+export const changeUser = (data:TUser): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return changeUserData(data).then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: res
+            })
+
+        } else {
+            dispatch({
+                type: SET_USER,
+                payload: {
+                    user: null,
+                    success: false,
+                    isLoading: false
+                }
+            })
+        }
+    }).catch(() => {
+        dispatch({
+            type: SEND_USER_FAILED
+        })
+        if (localStorage.getItem('refreshToken')) {
+            dispatch(refreshToken({token: '' + localStorage.getItem('refreshToken')}))
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+        }
+    }).finally(() => {
+        dispatch({
+            type: SET_AUTH_CHECKED
+        })
+    })
 }
 
 export const setError = (err: string | null): AppThunk => {
@@ -100,29 +133,27 @@ export const setError = (err: string | null): AppThunk => {
     }
 }
 
-export const registrationUser = (data: TUser): AppThunk => {
-    return (dispatch) => {
-        dispatch({
-            type: SEND_USER_REQUEST
-        })
-        return register(data).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: SET_USER,
-                    payload: res
-                })
-                localStorage.setItem('accessToken', res.accessToken)
-                localStorage.setItem('refreshToken', res.refreshToken)
-            } else {
-                dispatch({
-                    type: SEND_USER_FAILED
-                })
-            }
-        }).catch(err => {
-            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
-            dispatch(setError(err))
-        })
-    }
+export const registrationUser = (data: TUser): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return register(data).then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: res
+            })
+            localStorage.setItem('accessToken', res.accessToken)
+            localStorage.setItem('refreshToken', res.refreshToken)
+        } else {
+            dispatch({
+                type: SEND_USER_FAILED
+            })
+        }
+    }).catch(err => {
+        // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+        dispatch(setError(err))
+    })
 }
 
 export const logInUser = (data: TFormFields): AppThunk => {
@@ -150,84 +181,78 @@ export const logInUser = (data: TFormFields): AppThunk => {
     }
 }
 
-export const logOutUser = (data: TToken): AppThunk => {
-    return (dispatch) => {
-        dispatch({
-            type: SEND_USER_REQUEST
-        })
-        return logout(data).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: SET_USER,
-                    payload: {
-                        user: null,
-                        success: false,
-                        isLoading: false
-                    }
-                })
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-            } else {
-                dispatch({
-                    type: SEND_USER_FAILED
-                })
-            }
-        }).catch(err => {
-            console.log(`%c ${err}`, 'background-color: #FFC0CB');
-        })
-    }
+export const logOutUser = (data: TToken): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return logout(data).then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: {
+                    user: null,
+                    success: false,
+                    isLoading: false
+                }
+            })
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+        } else {
+            dispatch({
+                type: SEND_USER_FAILED
+            })
+        }
+    }).catch(err => {
+        console.log(`%c ${err}`, 'background-color: #FFC0CB');
+    })
 }
 
-export const forgotPassword = (data: TForgotFormFields): AppThunk => {
-    return (dispatch) => {
-        dispatch({
-            type: SEND_USER_REQUEST
-        })
-        return forgotPass(data).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: SET_USER,
-                    payload: {
-                        user: null,
-                        success: res.success,
-                        isLoading: false
-                    }
-                })
-            } else {
-                dispatch({
-                    type: SEND_USER_FAILED
-                })
-            }
-        }).catch(err => {
-            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
-            dispatch(setError(err))
-        })
-    }
+export const forgotPassword = (data: TForgotFormFields): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return forgotPass(data).then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: {
+                    user: null,
+                    success: res.success,
+                    isLoading: false
+                }
+            })
+        } else {
+            dispatch({
+                type: SEND_USER_FAILED
+            })
+        }
+    }).catch(err => {
+        // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+        dispatch(setError(err))
+    })
 }
 
-export const resetPassword = (data: TResetFormFields): AppThunk => {
-    return (dispatch) => {
-        dispatch({
-            type: SEND_USER_REQUEST
-        })
-        return resetPass(data).then(res => {
-            if (res && res.success) {
-                dispatch({
-                    type: SET_USER,
-                    payload: {
-                        user: null,
-                        success: res.success,
-                        isLoading: false
-                    }
-                })
-            } else {
-                dispatch({
-                    type: SEND_USER_FAILED
-                })
-            }
-        }).catch(err => {
-            // console.log(`%c ${err}`, 'background-color: #FFC0CB');
-            dispatch(setError(err))
-        })
-    }
+export const resetPassword = (data: TResetFormFields): AppThunk => (dispatch) => {
+    dispatch({
+        type: SEND_USER_REQUEST
+    })
+    return resetPass(data).then(res => {
+        if (res && res.success) {
+            dispatch({
+                type: SET_USER,
+                payload: {
+                    user: null,
+                    success: res.success,
+                    isLoading: false
+                }
+            })
+        } else {
+            dispatch({
+                type: SEND_USER_FAILED
+            })
+        }
+    }).catch(err => {
+        // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+        dispatch(setError(err))
+    })
 }

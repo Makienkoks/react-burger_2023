@@ -31,15 +31,16 @@ const OrdersList = ({revers = false, showStatus = true, list }: TOrdersList) => 
         return ingredients.filter(item => item._id === id)
     }
     const getImage = (id: string) => {
-        return getIngredient(id)[0].image_mobile
+        return getIngredient(id)[0] && 'image_mobile' in getIngredient(id)[0] ? getIngredient(id)[0].image_mobile : null
     }
     const getName = (id: string) => {
-        return getIngredient(id)[0].name
+        return getIngredient(id)[0] && 'name' in getIngredient(id)[0] ? getIngredient(id)[0].name : null
     }
     const getSum = (ingredients: string[]) => {
         let sum = 0
         ingredients.map(items => {
-            sum = Number(sum) + getIngredient(items)[0].price
+            const price = getIngredient(items)[0] && 'price' in getIngredient(items)[0] ? getIngredient(items)[0].price : 0
+            sum = Number(sum) + Number(price)
         })
         return sum
     }
@@ -87,7 +88,7 @@ const OrdersList = ({revers = false, showStatus = true, list }: TOrdersList) => 
                                                 key={index}
                                                 style={{ zIndex: item.ingredients.length - index }}>
                                                 <img className={`${styles.order_ingredient_image}`}
-                                                     src={'' + getImage(items)} alt={'' + getName(items)} />
+                                                     src={getImage(items) ? '' + getImage(items) : ""} alt={'' + getName(items)} />
 
                                             </li>
                                         )}
