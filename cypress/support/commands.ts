@@ -35,3 +35,13 @@
 //     }
 //   }
 // }
+
+// @ts-ignore
+Cypress.Commands.add("getIngredientsAndVisit", () => {
+    // @ts-ignore
+    cy.intercept("GET", "https://norma.nomoreparties.space/api/ingredients", {
+        fixture: "ingredients",
+    });
+    // @ts-ignore
+    cy.visit("http://localhost:3000/");
+});
