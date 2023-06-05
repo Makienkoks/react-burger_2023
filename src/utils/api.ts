@@ -1,7 +1,7 @@
 import {getResponse} from './utils';
 import {TForgotFormFields, TFormFields, TOrder, TResetFormFields, TToken, TUser} from "./types";
 
-const apiConfig = {
+export const apiConfig = {
   baseUrl: 'https://norma.nomoreparties.space/api'
 }
 
@@ -14,26 +14,33 @@ export const send = async (data: TOrder) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-        Authorization: '' + localStorage.getItem('accessToken'),
+      Authorization: '' + localStorage.getItem('accessToken'),
     },
     body: JSON.stringify(data)
   }
   return await fetch(`${apiConfig.baseUrl}/orders`, requestOptions).then(getResponse)
 }
 
-export const user = async (data?:TUser | null) => {
+export const user = async () => {
   const requestOptions = {
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: '' + localStorage.getItem('accessToken'),
+    }
+  }
+  return await fetch(`${apiConfig.baseUrl}/auth/user?`, requestOptions).then(getResponse)
+}
+
+export const changeUserData = async (data:TUser) => {
+  const requestOptions = {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
       Authorization: '' + localStorage.getItem('accessToken'),
     },
     body: JSON.stringify(data)
   }
-  if (data) {
-    requestOptions.method = 'PATCH'
-  }
-
   return await fetch(`${apiConfig.baseUrl}/auth/user?`, requestOptions).then(getResponse)
 }
 export const register = async (data:TUser) => {

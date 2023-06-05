@@ -42,7 +42,9 @@ const IngredientDetails = ({ item, onCardClick, showDetails }: TIngredientDetail
         })
     });
     return (
-        <div key={item._id}
+        <div
+            data-elem='ingredient'
+            key={item._id}
              ref={ dragRef }
              className={`${styles.block} ${showDetails ? '' : styles.item}`}
              onClick={handleClick}>

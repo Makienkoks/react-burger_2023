@@ -1,3 +1,3 @@
-export const getResponse = (res: Response): Promise<any> => {
+export const getResponse = (res: Response) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 }

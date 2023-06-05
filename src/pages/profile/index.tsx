@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import styles from "../profile/profile.module.css";
 import {PasswordInput, EmailInput, Input, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/hooks';
-import {getUser, setError} from "../../services/user/actions";
+import {changeUser, setError} from "../../services/user/actions";
 import { TUser } from "../../utils/types";
 import useForm from "../../hooks/useForm";
 
@@ -76,11 +76,11 @@ const Profile = () => {
             password: ''
         }
         if (values && 'password' in values && values.password) {
-            dispatch(getUser(values as TUser))
+            dispatch(changeUser(values as TUser))
         } else {
             data.name = values.name as string
             data.email = values.email as string
-            dispatch(getUser(data))
+            dispatch(changeUser(data))
         }
     }
 

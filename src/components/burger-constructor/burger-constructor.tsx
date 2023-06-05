@@ -89,9 +89,9 @@ const BurgerConstructor = () => {
     )
     return (
         <div className={`${styles.constructor}`}>
-            <div className={styles.drop_block} ref={dropRef} style={{ outline }}>
+            <div data-elem="constructor" className={styles.drop_block} ref={dropRef} style={{ outline }}>
                 {bun ?
-                    <div className={styles.wrapper}>
+                    <div data-elem="constructorTop" className={styles.wrapper}>
                         <ConstructorElement
                             type="top"
                             isLocked={true}
@@ -101,7 +101,7 @@ const BurgerConstructor = () => {
                         />
                     </div>
                     :
-                    <div className={`${styles.default_element} pr-4`}>
+                    <div data-elem="constructorTop" className={`${styles.default_element} pr-4`}>
                         <div className={`${styles.default_constructor} 
                         constructor-element 
                         constructor-element_pos_top mb-4 ml-12`}>
@@ -109,7 +109,7 @@ const BurgerConstructor = () => {
                         </div>
                     </div>
                 }
-                    <section>
+                    <section data-elem="constructorBody">
                         {list && list.length > 0 ?
                             <div className={styles.ingredients}>
                                 {list.map((item: TIngredient, index: number) =>
@@ -132,7 +132,7 @@ const BurgerConstructor = () => {
                         }
                     </section>
                 {bun ?
-                    <div className={styles.wrapper}>
+                    <div data-elem="constructorBottom" className={styles.wrapper}>
                         <ConstructorElement
                             type="bottom"
                             isLocked={true}
@@ -142,7 +142,7 @@ const BurgerConstructor = () => {
                         />
                     </div>
                     :
-                    <div className={`${styles.default_element} pr-4`}>
+                    <div data-elem="constructorBottom" className={`${styles.default_element} pr-4`}>
                         <div className={`${styles.default_constructor}
                         constructor-element
                         constructor-element_pos_bottom mb-4`}>
@@ -160,7 +160,7 @@ const BurgerConstructor = () => {
                         <CurrencyIcon type="primary" />
                     </span>
                 </div>
-                <Button size="large"
+                <Button data-elem="buttonOrder" size="large"
                         disabled={!bun}
                         htmlType="button"
                         type="primary"

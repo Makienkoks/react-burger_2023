@@ -45,7 +45,6 @@ export type TOrderData = {
         number: string
 }
 
-//////////////////////////////////////////////////////
 export enum WebsocketStatus {
         CONNECTING = 'CONNECTING...',
         ONLINE = 'ONLINE',
@@ -68,23 +67,4 @@ export type TFeedOrders = {
         name: string;
         ingredients: Array<string>;
 }
-
-// export enum WsFeedActionType {
-//         DATA = 'data',          //обновление всей таблицы
-//         UPDATE = 'update',      //обновление одной или нескольких строк
-// }
-//
-// export type Data = {
-//         type: WsFeedActionType.DATA,
-//         data: WsFeed
-// }
-//
-// export type Update = {
-//         type: WsFeedActionType.UPDATE,
-//         data: WsFeed
-// }
-//
-// export type WsFeedAction = Data | Update;
-//
-// export type WsFeedActions = Array<WsFeedAction>;
 

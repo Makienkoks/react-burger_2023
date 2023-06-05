@@ -20,27 +20,25 @@ export type TGetIngredientsActions =
     | IGetIngredientsRequestSuccessAction
     | IGetIngredientsRequestFailedAction
 
-export const loadIngredients = (): AppThunk => {
-  return (dispatch) => {
-    dispatch({
-      type: GET_INGREDIENTS_REQUEST
-    })
-    getIngredientsData().then(res => {
-      if (res && res.success) {
-        dispatch({
-          type: GET_INGREDIENTS_SUCCESS,
-          payload: res.data
-        })
-      } else {
-        dispatch({
-          type: GET_INGREDIENTS_FAILED
-        })
-      }
-    }).catch(err => {
-      // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+export const loadIngredients = (): AppThunk => (dispatch) => {
+  dispatch({
+    type: GET_INGREDIENTS_REQUEST
+  })
+  return getIngredientsData().then(res => {
+    if (res && res.success) {
+      dispatch({
+        type: GET_INGREDIENTS_SUCCESS,
+        payload: res.data
+      })
+    } else {
       dispatch({
         type: GET_INGREDIENTS_FAILED
       })
+    }
+  }).catch(err => {
+    // console.log(`%c ${err}`, 'background-color: #FFC0CB');
+    dispatch({
+      type: GET_INGREDIENTS_FAILED
     })
-  }
+  })
 }

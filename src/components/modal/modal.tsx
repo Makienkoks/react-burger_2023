@@ -23,14 +23,14 @@ const Modal = ({ title, onClose, children }: IModalProps) => {
     });
     return ReactDOM.createPortal(
         (
-            <div className={styles.modal_wrap}>
+            <div data-elem='modal' className={styles.modal_wrap}>
                 <div className={styles.modal}>
                     <div className={styles.top}>
                         {title &&
                         <p className={'text text_type_main-large pt-3'} >
                             {title}
                         </p>}
-                        <span className={styles.icon}>
+                        <span data-elem='modal-closer'  className={styles.icon}>
                             <CloseIcon type="primary" onClick={ handleClick } />
                         </span>
                     </div>

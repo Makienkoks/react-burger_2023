@@ -16,18 +16,17 @@ export const reducer = (state = initialState, action: TOrderListActions) => {
         case ADD_INGREDIENT: {
             return {
                 ...state,
-                bun: action.payload.bun,
-                ingredients: action.payload.ingredients
+                ...action.payload
             };
         }
         case REMOVE_INGREDIENT: {
             return { ...state,
-                ingredients: action.payload.ingredients
+                ...action.payload
             };
         }
         case CHANGE_INGREDIENT: {
             return { ...state,
-                ingredients: action.payload.ingredients
+                ...action.payload
             };
         }
         default: {
